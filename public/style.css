@@ -1,0 +1,66 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  background: #000;
+}
+
+.parallax {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 120%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+#layer-back {
+  background-image: url("images/background.png");
+  z-index: 1;
+}
+
+#layer-mid {
+  background-image: url("images/midground.png");
+  z-index: 2;
+}
+
+#layer-front {
+  background-image: url("images/foreground.png");
+  z-index: 3;
+}
+
+/* ================== INTERAKTYWNE OBIEKTY ================== */
+.interactive {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* żeby nie blokowały ruchu myszy na tle */
+  z-index: 4;
+}
+
+.hover-object {
+  position: absolute;
+  width: 100px;
+  height: auto;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  pointer-events: auto; /* tylko obrazki reagują na hover */
+  cursor: pointer;
+}
+
+.hover-object:hover {
+  transform: scale(1.1);
+  filter: brightness(120%);
+}
