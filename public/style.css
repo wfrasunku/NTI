@@ -17,50 +17,43 @@ body, html {
   position: absolute;
   top: 0;
   left: 0;
-  width: 120%;
-  height: 120%;
+  width: 110%;
+  height: 110%;
   background-size: cover;
   background-position: center;
   will-change: transform;
   transition: transform 0.1s ease-out;
 }
 
+/* ================== WARSTWY PARALAXY ================== */
 #layer-back {
-  background-image: url("images/background.png");
+  background-image: url("images/Paralax_back.png");
   z-index: 1;
 }
 
-#layer-mid {
-  background-image: url("images/midground.png");
+#layer-front {
+  background-image: url("images/Paralax_front.png");
   z-index: 2;
 }
 
-#layer-front {
-  background-image: url("images/foreground.png");
+#layer-objects {
   z-index: 3;
+  pointer-events: none;
 }
 
 /* ================== INTERAKTYWNE OBIEKTY ================== */
-.interactive {
+.hover-object {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* żeby nie blokowały ruchu myszy na tle */
+  width: auto;
+  height: auto;
+  transform: scale(1.1);
+  transition: transform 0.3s ease, filter 0.3s ease;
+  pointer-events: auto;
+  cursor: pointer;
   z-index: 4;
 }
 
-.hover-object {
-  position: absolute;
-  width: 100px;
-  height: auto;
-  transition: transform 0.3s ease, filter 0.3s ease;
-  pointer-events: auto; /* tylko obrazki reagują na hover */
-  cursor: pointer;
-}
-
 .hover-object:hover {
-  transform: scale(1.1);
-  filter: brightness(120%);
+  transform: scale(1.2);
+  filter: brightness(120%) drop-shadow(0 0 15px rgba(255, 215, 139, 0.774));
 }

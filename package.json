@@ -9,7 +9,7 @@
     "dev": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Antoni Frasuński, Mateusz Maciejewski",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0"

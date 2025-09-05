@@ -2,20 +2,21 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Efekt Parallax 3D</title>
+  <title>Efekt Parallax 3D + Hover</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="parallax">
     <div class="layer" id="layer-back"></div>
-    <div class="layer" id="layer-mid"></div>
     <div class="layer" id="layer-front"></div>
 
-    <!-- Interaktywne elementy -->
-    <div class="interactive">
-      <img src="images/object1.png" class="hover-object" style="top:20%; left:30%">
-      <img src="images/object2.png" class="hover-object" style="top:50%; left:60%">
-      <img src="images/object3.png" class="hover-object" style="top:70%; left:40%">
+    <!-- ================== INTERAKTYWNE OBIEKTY ================== -->
+    <div class="layer interactive-layer" id="layer-objects">
+      <img src="images/InteractableObjects/Drawer.png" class="hover-object" style="top:51%; left:6%">
+      <img src="images/InteractableObjects/Table.png" class="hover-object" style="top:60%; left:35%">
+      <img src="images/InteractableObjects/Vehicle.png" class="hover-object" style="top:38.5%; left:39.5%">
+      <img src="images/InteractableObjects/Boxes.png" class="hover-object" style="top:33%; left:66%">
+      <img src="images/InteractableObjects/Bookcase.png" class="hover-object" style="top:16%; left:84%">
     </div>
   </div>
 
