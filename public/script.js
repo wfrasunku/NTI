@@ -74,3 +74,16 @@ window.addEventListener("load", () => {
         }
     }, 50);
 });
+
+window.addEventListener('DOMContentLoaded', () => {
+    const userInfo = document.getElementById('user-info');
+
+    // Zak?adamy, ?e po logowaniu zapisujesz username do localStorage
+    const user = localStorage.getItem('loggedInUser');
+
+    if (user) {
+        userInfo.innerText = `Witaj, ${user}`;
+    } else {
+        userInfo.innerHTML = `Nie jeste? zalogowany — <a href="login/login.html">Log in</a>`;
+    }
+});

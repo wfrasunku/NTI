@@ -11,9 +11,12 @@
   "keywords": [],
   "author": "Antoni Frasuński, Mateusz Maciejewski",
   "license": "ISC",
-  "dependencies": {
-    "express": "^5.1.0"
-  },
+    "dependencies": {
+        "express": "^5.1.0",
+        "bcrypt": "^5.1.0",
+        "cors": "^2.8.5",
+        "mongoose": "^7.6.1"
+    },
   "devDependencies": {
     "nodemon": "^3.1.10"
   }
