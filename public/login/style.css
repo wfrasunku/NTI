@@ -68,9 +68,11 @@ a {
         }
 
 .message-space {
-    min-height: 24px; /* zapobiega przesuwaniu */
+    height: 30px; /* sta?a wysoko??, niezale?na od tekstu */
     margin-top: 10px;
+    overflow: hidden;
 }
+
 
 .login-message {
     font-size: 16px;
@@ -78,6 +80,8 @@ a {
     padding: 0;
     opacity: 0;
     transition: opacity 1s ease;
+    color: red; /* lub dynamicznie w JS */
+    height: 100%;
 }
 
     .login-message.visible {
