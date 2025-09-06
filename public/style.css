@@ -81,38 +81,65 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #111;
+    background: url("images/loaderBackground.png") no-repeat center center;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
     z-index: 10000;
     transition: opacity 1.5s ease; /* płynne zanikanie */
 }
 
+/* Logo */
 #logo {
-    width: 300px; /* szerokość loga */
-    height: auto; /* zachowanie proporcji */
-    text-align: center;
+    width: 200px;
+    height: auto;
     margin-bottom: 30px;
 }
 
+/* Kontener ramki */
 .progress-bar {
-    width: 300px;
-    height: 20px;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    overflow: hidden;
+    width: 400px; /* szerokość ramki */
+    height: 80px; /* wysokość ramki */
+    position: relative;
+    display: flex; /* wyśrodkowanie */
+    align-items: center; /* wertykalnie */
+    justify-content: center; /* horyzontalnie */
 }
 
+/* Wrapper paska – teraz zawsze w centrum */
+.progress-wrapper {
+    width: 80%; /* szerokość paska, np. 60% ramki */
+    height: 53%; /* wysokość paska, np. 30% ramki */
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+/* Pasek wypełnienia */
 .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #00ffcc, #0066ff);
+    background: linear-gradient(#ab1005, #ff2919, #ff6459);
     transition: width 0.2s ease;
 }
 
+/* Ramka nad paskiem */
+.progress-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Klasa fade-out do płynnego wygaszenia */
 #preloader.fade-out {
     opacity: 0;
     pointer-events: none;

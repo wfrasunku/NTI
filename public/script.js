@@ -63,11 +63,14 @@ window.addEventListener("load", () => {
 
         if (load >= 100) {
             clearInterval(interval);
-            // p?ynne wygaszenie
+
+            // Dodajemy klas? fade-out
             preloader.classList.add("fade-out");
+
+            // Usuwamy dopiero po zako?czeniu animacji opacity
             setTimeout(() => {
                 preloader.style.display = "none";
-            }, 1500); // dopasowane do transition w CSS
+            }, 1500); // tyle samo co transition w CSS
         }
     }, 50);
 });
