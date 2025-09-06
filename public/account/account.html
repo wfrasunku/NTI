@@ -6,17 +6,47 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="top-bar">
+        <button id="edit-profile-toggle">Edytuj profil</button>
+    </div>
     <div class="container">
         <div class="profile-container">
             <img id="profile-image" src="../images/default-profile.png" alt="Profilowe">
-            <h2 id="profile-username">Użytkownik</h2>
-            <p><strong>Data utworzenia konta:</strong> <span id="creation-date">--</span></p>
-            <p><strong>Płeć:</strong> <span id="profile-gender">--</span></p>
-            <p><strong>Opis:</strong></p>
-            <p id="profile-description">Brak opisu</p>
+
+            <div id="view-mode">
+                <h2 id="profile-username">Użytkownik</h2>
+                <p><strong>Data utworzenia konta:</strong> <span id="creation-date">--</span></p>
+                <p><strong>Płeć:</strong> <span id="profile-gender">--</span></p>
+                <p><strong>Opis:</strong></p>
+                <p id="profile-description">Brak opisu</p>
+            </div>
+
+            <form id="edit-mode" class="hidden" enctype="multipart/form-data">
+                <label for="edit-username">Nazwa użytkownika:</label>
+                <input type="text" id="edit-username" name="username" required>
+
+                <label for="edit-gender">Płeć:</label>
+                <select id="edit-gender" name="gender">
+                    <option value="male">Mężczyzna</option>
+                    <option value="female">Kobieta</option>
+                </select>
+
+                <label for="edit-description">Opis:</label>
+                <textarea id="edit-description" name="description" rows="4"></textarea>
+
+                <label for="edit-image">Zdjęcie profilowe:</label>
+                <label for="edit-image" class="custom-file-upload">📁 Wybierz zdjęcie</label>
+                <input type="file" id="edit-image" name="profileImage" accept="image/*">
+
+
+                <button type="submit">Zapisz zmiany</button>
+                <button type="button" id="cancel-edit">Anuluj</button>
+            </form>
+
+            <p id="save-message" class="hidden"></p>
             <a href="../index.html" class="back-button">← Powrót</a>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

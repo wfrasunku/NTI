@@ -1,12 +1,20 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const username = localStorage.getItem('loggedInUser');
+    const originalUsername = localStorage.getItem('loggedInUser');
+    let currentUsername = originalUsername;
+    let originalImageSrc = ''; // <--- zapami?tanie oryginalnego zdj?cia
 
-    if (!username) {
+    const viewMode = document.getElementById('view-mode');
+    const editMode = document.getElementById('edit-mode');
+    const editBtn = document.getElementById('edit-profile-toggle');
+    const cancelBtn = document.getElementById('cancel-edit');
+    const saveMessage = document.getElementById('save-message');
+
+    if (!originalUsername) {
         window.location.href = '../login/login.html';
         return;
     }
 
-    try {
+    async function loadUserData(username) {
         const response = await fetch(`http://localhost:3000/api/user/${username}`);
         const data = await response.json();
 
@@ -15,10 +23,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        console.log("Dane u?ytkownika:", data);
-
-        document.getElementById('profile-username').innerText = data.username || 'Brak nazwy';
-        document.getElementById('creation-date').innerText = new Date(data.createdAt).toLocaleDateString('pl-PL') || 'brak';
+        document.getElementById('profile-username').innerText = data.username;
+        document.getElementById('creation-date').innerText = new Date(data.createdAt).toLocaleDateString('pl-PL');
         document.getElementById('profile-description').innerText = data.description || 'Brak opisu';
         document.getElementById('profile-gender').innerText = data.gender === 'female' ? 'Kobieta' : 'M??czyzna';
 
@@ -26,14 +32,89 @@ document.addEventListener('DOMContentLoaded', async () => {
             ? '../images/default-female.png'
             : '../images/default-male.png';
 
-        const imageToShow = data.profileImage?.trim()
-            ? data.profileImage
-            : defaultImage;
-
+        const imageToShow = data.profileImage?.trim() ? data.profileImage : defaultImage;
         document.getElementById('profile-image').src = imageToShow;
+        originalImageSrc = imageToShow; // <-- zapisz aktualne zdj?cie
 
-    } catch (err) {
-        console.error(err);
-        document.body.innerHTML = `<h2 style="color:red;">B??d ?adowania danych</h2>`;
+        document.getElementById('edit-username').value = data.username;
+        document.getElementById('edit-gender').value = data.gender;
+        document.getElementById('edit-description').value = data.description || '';
     }
+
+    await loadUserData(currentUsername);
+
+    // ?? Podgl?d zdj?cia po wyborze
+    const imageInput = document.getElementById('edit-image');
+    imageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('profile-image').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ??? Tryb edycji
+    editBtn.addEventListener('click', () => {
+        viewMode.classList.add('hidden');
+        editMode.classList.remove('hidden');
+    });
+
+    // ? Anuluj – przywró? stare dane
+    cancelBtn.addEventListener('click', () => {
+        editMode.classList.add('hidden');
+        viewMode.classList.remove('hidden');
+
+        // Przywró? zdj?cie
+        document.getElementById('profile-image').src = originalImageSrc;
+        // Wyczy?? input ze zdj?ciem
+        imageInput.value = '';
+    });
+
+    // ?? Zapisz zmiany
+    document.getElementById('edit-mode').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const newUsername = document.getElementById('edit-username').value;
+        const gender = document.getElementById('edit-gender').value;
+        const description = document.getElementById('edit-description').value;
+        const file = imageInput.files[0];
+
+        const formData = new FormData();
+        formData.append('username', newUsername);
+        formData.append('gender', gender);
+        formData.append('description', description);
+        if (file) formData.append('profileImage', file);
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/user/${originalUsername}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('loggedInUser', result.username);
+                currentUsername = result.username;
+                saveMessage.innerText = '? Zmiany zapisane!';
+                saveMessage.style.color = 'green';
+                await loadUserData(currentUsername);
+                editMode.classList.add('hidden');
+                viewMode.classList.remove('hidden');
+            } else {
+                saveMessage.innerText = '? B??d zapisu: ' + result.message;
+                saveMessage.style.color = 'red';
+            }
+        } catch (err) {
+            console.error(err);
+            saveMessage.innerText = '? B??d po??czenia z serwerem';
+            saveMessage.style.color = 'red';
+        }
+
+        saveMessage.classList.remove('hidden');
+        setTimeout(() => saveMessage.classList.add('hidden'), 4000);
+    });
 });

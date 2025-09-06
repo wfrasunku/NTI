@@ -47,3 +47,113 @@ body {
     .back-button:hover {
         background-color: #3498db;
     }
+
+textarea {
+    width: 100%;
+    resize: none;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+button#save-profile {
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+    button#save-profile:hover {
+        background-color: #2ecc71;
+    }
+
+#save-message {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+.top-bar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#edit-profile-toggle {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    #edit-profile-toggle:hover {
+        background-color: #2980b9;
+    }
+
+form#edit-mode {
+    margin-top: 20px;
+    text-align: left;
+}
+
+    form#edit-mode label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+
+    form#edit-mode input[type="text"],
+    form#edit-mode select,
+    form#edit-mode textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+#edit-image::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+#edit-image::before {
+    content: '?? Wybierz zdj?cie';
+    display: inline-block;
+    background: #e0e0e0;
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 6px 10px;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#edit-image:hover::before {
+    background: #ccc;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#edit-image {
+    display: none;
+}
