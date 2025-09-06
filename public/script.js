@@ -53,9 +53,15 @@ document.querySelectorAll(".hover-object").forEach(obj => {
 
 /* ================== PRELOADER ================== */
 window.addEventListener("load", () => {
-    let progress = document.getElementById("progress");
     let preloader = document.getElementById("preloader");
 
+    // Sprawd?, czy loader ju? by? pokazany
+    if (localStorage.getItem("hasSeenLoader")) {
+        preloader.style.display = "none";
+        return;
+    }
+
+    let progress = document.getElementById("progress");
     let load = 0;
     let interval = setInterval(() => {
         load += 2;
@@ -63,14 +69,14 @@ window.addEventListener("load", () => {
 
         if (load >= 100) {
             clearInterval(interval);
-
-            // Dodajemy klas? fade-out
             preloader.classList.add("fade-out");
 
-            // Usuwamy dopiero po zako?czeniu animacji opacity
             setTimeout(() => {
                 preloader.style.display = "none";
-            }, 1500); // tyle samo co transition w CSS
+            }, 1500);
+
+            // Zapisz w localStorage ?e loader ju? by?
+            localStorage.setItem("hasSeenLoader", "true");
         }
     }, 50);
 });
@@ -78,11 +84,15 @@ window.addEventListener("load", () => {
 window.addEventListener('DOMContentLoaded', () => {
     const userInfo = document.getElementById('user-info');
 
-    // Zak?adamy, ?e po logowaniu zapisujesz username do localStorage
     const user = localStorage.getItem('loggedInUser');
 
     if (user) {
-        userInfo.innerText = `Witaj, ${user}`;
+        userInfo.innerHTML = `Witaj, ${user} <button id="logoutBtn">Wyloguj</button>`;
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('loggedInUser');
+            localStorage.removeItem('hasSeenLoader'); // ? reset loadera
+            window.location.href = '../index.html';
+        });
     } else {
         userInfo.innerHTML = `Nie jeste? zalogowany — <a href="login/login.html">Log in</a>`;
     }

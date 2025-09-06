@@ -164,3 +164,17 @@ body, html {
         text-decoration: none;
         margin-left: 8px;
     }
+
+#logoutBtn {
+    margin-left: 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+    #logoutBtn:hover {
+        background-color: #c0392b;
+    }
