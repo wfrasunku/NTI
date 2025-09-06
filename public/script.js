@@ -51,3 +51,23 @@ document.querySelectorAll(".hover-object").forEach(obj => {
   });
 });
 
+/* ================== PRELOADER ================== */
+window.addEventListener("load", () => {
+    let progress = document.getElementById("progress");
+    let preloader = document.getElementById("preloader");
+
+    let load = 0;
+    let interval = setInterval(() => {
+        load += 2;
+        progress.style.width = load + "%";
+
+        if (load >= 100) {
+            clearInterval(interval);
+            // p?ynne wygaszenie
+            preloader.classList.add("fade-out");
+            setTimeout(() => {
+                preloader.style.display = "none";
+            }, 1500); // dopasowane do transition w CSS
+        }
+    }, 50);
+});

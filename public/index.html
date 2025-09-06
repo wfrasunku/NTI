@@ -6,45 +6,58 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="parallax">
-    <div class="layer" id="layer-back"></div>
-    <div class="layer" id="layer-front"></div>
 
-    <!-- ================== INTERAKTYWNE OBIEKTY ================== -->
-    <div class="layer interactive-layer" id="layer-objects">
-      <img src="images/InteractableObjects/Drawer.png" 
-     class="hover-object" 
-     style="top:51%; left:6%" 
-     data-message="To jest szuflada"
-     data-link="drawer.html">
+    <!-- Site Loader --> >
+    <div id="preloader">
+        <img id="logo" src="images/logo.png" alt="Logo">
+        <div id="logo">Loading into dungeon</div>
 
-    <img src="images/InteractableObjects/Table.png" 
-        class="hover-object" 
-        style="top:60%; left:35%" 
-        data-message="To jest stół"
-        data-link="table.html">
-
-    <img src="images/InteractableObjects/Vehicle.png" 
-        class="hover-object" 
-        style="top:38.5%; left:39.5%" 
-        data-message="Pojazd"
-        data-link="vehicle.html">
-
-    <img src="images/InteractableObjects/Boxes.png" 
-        class="hover-object" 
-        style="top:33%; left:66%" 
-        data-message="Skrzynki"
-        data-link="boxes.html">
-
-    <img src="images/InteractableObjects/Bookcase.png" 
-        class="hover-object" 
-        style="top:16%; left:84%" 
-        data-message="Regał z książkami"
-        data-link="bookcase.html">
-    <div id="tooltip"></div> 
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
     </div>
-  </div>
-  <script src="script.js"></script>
- 
+
+
+
+    <div class="parallax">
+        <div class="layer" id="layer-back"></div>
+        <div class="layer" id="layer-front"></div>
+
+        <!-- ================== INTERAKTYWNE OBIEKTY ================== -->
+        <div class="layer interactive-layer" id="layer-objects">
+            <img src="images/InteractableObjects/Drawer.png"
+                 class="hover-object"
+                 style="top:51%; left:6%"
+                 data-message="Login"
+                 data-link="drawer.html">
+
+            <img src="images/InteractableObjects/Table.png"
+                 class="hover-object"
+                 style="top:60%; left:35%"
+                 data-message="To jest stół"
+                 data-link="table.html">
+
+            <img src="images/InteractableObjects/Vehicle.png"
+                 class="hover-object"
+                 style="top:38.5%; left:39.5%"
+                 data-message="Pojazd"
+                 data-link="vehicle.html">
+
+            <img src="images/InteractableObjects/Boxes.png"
+                 class="hover-object"
+                 style="top:33%; left:66%"
+                 data-message="Skrzynki"
+                 data-link="boxes.html">
+
+            <img src="images/InteractableObjects/Bookcase.png"
+                 class="hover-object"
+                 style="top:16%; left:84%"
+                 data-message="Regał z książkami"
+                 data-link="bookcase.html">
+            <div id="tooltip"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+
 </body>
 </html>
