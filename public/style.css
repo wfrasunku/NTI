@@ -186,3 +186,55 @@ body, html {
     text-decoration: underline;
     cursor: pointer;
 }
+
+#sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 200px;
+    background: rgba(0,0,0,0.85);
+    color: white;
+    padding: 15px;
+    border-right: 2px solid #444;
+    z-index: 9999;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+}
+
+    #sidebar h3 {
+        margin-top: 0;
+    }
+
+    #sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        #sidebar ul li {
+            margin-bottom: 8px;
+        }
+
+            #sidebar ul li a {
+                color: #00bfff;
+                text-decoration: none;
+            }
+
+.sidebar-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 10000;
+    background: #00bfff;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}

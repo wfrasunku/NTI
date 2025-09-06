@@ -1,69 +1,69 @@
+// ================== PARALLAX ==================
 const layers = [
-  { el: document.getElementById("layer-back"), intensity: 50 },
-  { el: document.getElementById("layer-front"), intensity: 100 },
-  { el: document.getElementById("layer-objects"), intensity: 100 }
+    { el: document.getElementById("layer-back"), intensity: 50 },
+    { el: document.getElementById("layer-front"), intensity: 100 },
+    { el: document.getElementById("layer-objects"), intensity: 100 }
 ];
 
 document.addEventListener("mousemove", (e) => {
-  const x = e.clientX / window.innerWidth;
-  const y = e.clientY / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
-  layers.forEach(layer => {
-    const moveX = -x * 3 * layer.intensity;
-    const moveY = -y * 1.5 * layer.intensity;
-    layer.el.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
-  });
+    layers.forEach(layer => {
+        const moveX = -x * 3 * layer.intensity;
+        const moveY = -y * 1.5 * layer.intensity;
+        layer.el.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
+    });
 });
 
-/* ================== TOOLTIP + LINKI ================== */
+// ================== TOOLTIP + KLIKALNE LINKI ==================
 const tooltip = document.getElementById("tooltip");
 let tooltipTimeout;
 
 document.querySelectorAll(".hover-object").forEach(obj => {
-  obj.addEventListener("mouseenter", (e) => {
-    const message = obj.dataset.message || "Brak opisu";
+    obj.addEventListener("mouseenter", (e) => {
+        const message = obj.dataset.message || "Brak opisu";
 
-    tooltipTimeout = setTimeout(() => {
-      tooltip.textContent = message;
-      tooltip.style.display = "block";
-      tooltip.style.opacity = "1";
-      tooltip.style.left = e.clientX + 15 + "px";
-      tooltip.style.top = e.clientY + 15 + "px";
-    }, 500);
-  });
+        tooltipTimeout = setTimeout(() => {
+            tooltip.textContent = message;
+            tooltip.style.display = "block";
+            tooltip.style.opacity = "1";
+            tooltip.style.left = e.clientX + 15 + "px";
+            tooltip.style.top = e.clientY + 15 + "px";
+        }, 500);
+    });
 
-  obj.addEventListener("mousemove", (e) => {
-    if (tooltip.style.display === "block") {
-      tooltip.style.left = e.clientX + 15 + "px";
-      tooltip.style.top = e.clientY + 15 + "px";
-    }
-  });
+    obj.addEventListener("mousemove", (e) => {
+        if (tooltip.style.display === "block") {
+            tooltip.style.left = e.clientX + 15 + "px";
+            tooltip.style.top = e.clientY + 15 + "px";
+        }
+    });
 
-  obj.addEventListener("mouseleave", () => {
-    clearTimeout(tooltipTimeout);
-    tooltip.style.opacity = "0";
-    tooltip.style.display = "none";
-  });
+    obj.addEventListener("mouseleave", () => {
+        clearTimeout(tooltipTimeout);
+        tooltip.style.opacity = "0";
+        tooltip.style.display = "none";
+    });
 
-  obj.addEventListener("click", () => {
-    const link = obj.dataset.link;
-    if (link) window.location.href = link;
-  });
+    obj.addEventListener("click", () => {
+        const link = obj.dataset.link;
+        if (link) window.location.href = link;
+    });
 });
 
-/* ================== PRELOADER ================== */
+// ================== PRELOADER (tylko raz) ==================
 window.addEventListener("load", () => {
-    let preloader = document.getElementById("preloader");
+    const preloader = document.getElementById("preloader");
 
-    // Sprawd?, czy loader ju? by? pokazany
     if (localStorage.getItem("hasSeenLoader")) {
         preloader.style.display = "none";
         return;
     }
 
-    let progress = document.getElementById("progress");
+    const progress = document.getElementById("progress");
     let load = 0;
-    let interval = setInterval(() => {
+    const interval = setInterval(() => {
         load += 2;
         progress.style.width = load + "%";
 
@@ -75,28 +75,57 @@ window.addEventListener("load", () => {
                 preloader.style.display = "none";
             }, 1500);
 
-            // Zapisz w localStorage ?e loader ju? by?
             localStorage.setItem("hasSeenLoader", "true");
         }
     }, 50);
 });
 
+// ================== OBS?UGA LOGOWANIA + SIDEBAR ==================
 window.addEventListener('DOMContentLoaded', () => {
     const userInfo = document.getElementById('user-info');
+    const toggleSidebarBtn = document.getElementById('toggle-sidebar');
+    const sidebar = document.getElementById('sidebar');
+    const userList = document.getElementById('user-list');
 
     const user = localStorage.getItem('loggedInUser');
 
     if (user) {
+        // ?? Zalogowany: poka? info i przycisk wylogowania
         userInfo.innerHTML = `
-  <a href="/account/account.html" id="profile-link">Witaj, ${user}</a>
-  <button id="logoutBtn">Wyloguj</button>
-`;
+      <a href="/account/account.html" id="profile-link">Witaj, ${user}</a>
+      <button id="logoutBtn">Wyloguj</button>
+    `;
+
+        // Obs?uga wylogowania
         document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('loggedInUser');
-            localStorage.removeItem('hasSeenLoader'); // ? reset loadera
+            localStorage.removeItem('hasSeenLoader');
             window.location.href = '../index.html';
         });
+
+        // ?? Poka? sidebar
+        toggleSidebarBtn.classList.remove('hidden');
+
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+
+        // ?? Pobierz list? u?ytkowników
+        fetch('http://localhost:3000/api/users')
+            .then(res => res.json())
+            .then(users => {
+                users.forEach(u => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="/account/account.html?user=${u.username}">${u.username}</a>`;
+                    userList.appendChild(li);
+                });
+            })
+            .catch(err => {
+                console.error('B??d ?adowania u?ytkowników:', err);
+            });
+
     } else {
+        // ? Niezalogowany
         userInfo.innerHTML = `Nie jeste? zalogowany — <a href="login/login.html">Log in</a>`;
     }
 });

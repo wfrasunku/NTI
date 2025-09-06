@@ -130,3 +130,12 @@ app.put('/api/user/:username', upload.single('profileImage'), async (req, res) =
         res.status(500).json({ message: 'Wewnętrzny błąd serwera' });
     }
 });
+
+app.get('/api/users', async (req, res) => {
+    try {
+        const users = await User.find({}, 'username'); // tylko pole username
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: 'Błąd serwera' });
+    }
+});

@@ -1,17 +1,27 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const originalUsername = localStorage.getItem('loggedInUser');
-    let currentUsername = originalUsername;
-    let originalImageSrc = ''; // <--- zapami?tanie oryginalnego zdj?cia
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewedUsername = urlParams.get('user') || originalUsername;
+
+    let originalImageSrc = '';
+    const isOwnProfile = viewedUsername === originalUsername;
 
     const viewMode = document.getElementById('view-mode');
     const editMode = document.getElementById('edit-mode');
     const editBtn = document.getElementById('edit-profile-toggle');
     const cancelBtn = document.getElementById('cancel-edit');
     const saveMessage = document.getElementById('save-message');
+    const imageInput = document.getElementById('edit-image');
 
     if (!originalUsername) {
         window.location.href = '../login/login.html';
         return;
+    }
+
+    // Je?li ogl?damy cudzy profil, ukryj edycj?
+    if (!isOwnProfile) {
+        editBtn.style.display = 'none';
+        editMode.classList.add('hidden');
     }
 
     async function loadUserData(username) {
@@ -34,17 +44,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const imageToShow = data.profileImage?.trim() ? data.profileImage : defaultImage;
         document.getElementById('profile-image').src = imageToShow;
-        originalImageSrc = imageToShow; // <-- zapisz aktualne zdj?cie
+        originalImageSrc = imageToShow;
 
-        document.getElementById('edit-username').value = data.username;
-        document.getElementById('edit-gender').value = data.gender;
-        document.getElementById('edit-description').value = data.description || '';
+        if (isOwnProfile) {
+            document.getElementById('edit-username').value = data.username;
+            document.getElementById('edit-gender').value = data.gender;
+            document.getElementById('edit-description').value = data.description || '';
+        }
     }
 
-    await loadUserData(currentUsername);
+    await loadUserData(viewedUsername);
 
-    // ?? Podgl?d zdj?cia po wyborze
-    const imageInput = document.getElementById('edit-image');
+    if (!isOwnProfile) return;
+
+    // Tryb edycji - tylko dla w?a?ciciela
+    editBtn.addEventListener('click', () => {
+        viewMode.classList.add('hidden');
+        editMode.classList.remove('hidden');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        editMode.classList.add('hidden');
+        viewMode.classList.remove('hidden');
+        document.getElementById('profile-image').src = originalImageSrc;
+        imageInput.value = '';
+    });
+
     imageInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -56,24 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // ??? Tryb edycji
-    editBtn.addEventListener('click', () => {
-        viewMode.classList.add('hidden');
-        editMode.classList.remove('hidden');
-    });
-
-    // ? Anuluj – przywró? stare dane
-    cancelBtn.addEventListener('click', () => {
-        editMode.classList.add('hidden');
-        viewMode.classList.remove('hidden');
-
-        // Przywró? zdj?cie
-        document.getElementById('profile-image').src = originalImageSrc;
-        // Wyczy?? input ze zdj?ciem
-        imageInput.value = '';
-    });
-
-    // ?? Zapisz zmiany
     document.getElementById('edit-mode').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -98,14 +105,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (response.ok) {
                 localStorage.setItem('loggedInUser', result.username);
-                currentUsername = result.username;
                 saveMessage.innerText = '? Zmiany zapisane!';
                 saveMessage.style.color = 'green';
-                await loadUserData(currentUsername);
+                await loadUserData(result.username);
                 editMode.classList.add('hidden');
                 viewMode.classList.remove('hidden');
             } else {
-                saveMessage.innerText = '? B??d zapisu: ' + result.message;
+                saveMessage.innerText = '? B??d: ' + result.message;
                 saveMessage.style.color = 'red';
             }
         } catch (err) {
