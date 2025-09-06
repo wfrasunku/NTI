@@ -80,7 +80,7 @@ window.addEventListener("load", () => {
     }, 50);
 });
 
-// ================== OBS?UGA LOGOWANIA + SIDEBAR ==================
+// ================== LOGOWANIE + SIDEBAR ==================
 window.addEventListener('DOMContentLoaded', () => {
     const userInfo = document.getElementById('user-info');
     const toggleSidebarBtn = document.getElementById('toggle-sidebar');
@@ -90,55 +90,63 @@ window.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem('loggedInUser');
 
     if (user) {
-        // ?? Zalogowany: poka? info i przycisk wylogowania
-        userInfo.innerHTML = `
-      <a href="/account/account.html" id="profile-link">Witaj, ${user}</a>
-      <button id="logoutBtn">Wyloguj</button>
-    `;
+        // Pokaz info zalogowanego u?ytkownika
+        fetch(`http://localhost:3000/api/user/${user}`)
+            .then(res => res.json())
+            .then(userData => {
+                const imgSrc = userData.profileImage || '/images/default-profile.png';
+                userInfo.innerHTML = `
+          <a href="/account/account.html" id="profile-link">
+            <img src="${imgSrc}" class="user-icon" />
+            ${userData.username}
+          </a>
+          <button id="logoutBtn">Wyloguj</button>
+        `;
 
-        // Obs?uga wylogowania
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('loggedInUser');
-            localStorage.removeItem('hasSeenLoader');
-            window.location.href = '../index.html';
-        });
+                // Wylogowanie
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    localStorage.removeItem('loggedInUser');
+                    localStorage.removeItem('hasSeenLoader');
+                    window.location.href = '../index.html';
+                });
+            });
 
-        // ?? Poka? sidebar
+        // Poka? sidebar
         toggleSidebarBtn.classList.remove('hidden');
-
         toggleSidebarBtn.addEventListener('click', () => {
             sidebar.classList.toggle('hidden');
         });
 
-        // ?? Pobierz list? u?ytkowników
+        // Pobierz list? u?ytkowników
         fetch('http://localhost:3000/api/users')
             .then(res => res.json())
             .then(users => {
-                // ?? Najpierw admini
                 const sortedUsers = users.sort((a, b) => {
                     if (a.role === 'admin' && b.role !== 'admin') return -1;
                     if (a.role !== 'admin' && b.role === 'admin') return 1;
-                    return a.username.localeCompare(b.username); // alfabetycznie
+                    return a.username.localeCompare(b.username);
                 });
 
                 sortedUsers.forEach(u => {
                     const li = document.createElement('li');
                     const isAdmin = u.role === 'admin';
+                    const imgSrc = u.profileImage || '/images/default-profile.png';
 
                     li.innerHTML = `
-        <a href="/account/account.html?user=${u.username}" class="${isAdmin ? 'admin-user' : ''}">
-          ${u.username}
-        </a>
-      `;
+            <a href="/account/account.html?user=${u.username}" class="${isAdmin ? 'admin-user' : ''}">
+              <img src="${imgSrc}" alt="img" class="user-icon">
+              ${u.username}
+            </a>
+          `;
                     userList.appendChild(li);
                 });
             })
             .catch(err => {
                 console.error('B??d ?adowania u?ytkowników:', err);
+                document.getElementById("preloader")?.classList.add("hidden");
             });
-
     } else {
-        // ? Niezalogowany
+        // Niezalogowany
         userInfo.innerHTML = `Nie jeste? zalogowany — <a href="login/login.html">Log in</a>`;
     }
 });

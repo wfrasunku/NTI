@@ -243,7 +243,16 @@ a.admin-user {
     font-weight: bold;
 }
 
-    a.admin-user::before {
+    a.admin-user::after {
         content: "🛡️ ";
         margin-right: 5px;
     }
+
+.user-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+    vertical-align: middle;
+}

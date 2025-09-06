@@ -172,3 +172,16 @@ form#edit-mode {
     #delete-user-btn:hover {
         background-color: #c0392b;
     }
+button.danger {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    button.danger:hover {
+        background-color: #c0392b;
+    }

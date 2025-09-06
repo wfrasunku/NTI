@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const viewedUsername = urlParams.get('user') || originalUsername;
 
-    let originalImageSrc = '';
     const isOwnProfile = viewedUsername === originalUsername;
 
     const viewMode = document.getElementById('view-mode');
@@ -12,13 +11,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cancelBtn = document.getElementById('cancel-edit');
     const saveMessage = document.getElementById('save-message');
     const imageInput = document.getElementById('edit-image');
+    const deleteBtn = document.getElementById('delete-user-btn');
+
+    let loggedInUserRole = 'user';
+    let originalImageSrc = '';
 
     if (!originalUsername) {
         window.location.href = '../login/login.html';
         return;
     }
 
-    // Je?li ogl?damy cudzy profil, ukryj edycj?
+    // Pobieranie danych zalogowanego u?ytkownika (rola)
+    try {
+        const res = await fetch(`http://localhost:3000/api/user/${originalUsername}`);
+        const loggedUser = await res.json();
+        loggedInUserRole = loggedUser.role;
+    } catch (e) {
+        console.error("B??d pobierania danych zalogowanego u?ytkownika.");
+    }
+
+    // Ukryj edycj?, je?li nie swój profil
     if (!isOwnProfile) {
         editBtn.style.display = 'none';
         editMode.classList.add('hidden');
@@ -55,103 +67,135 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await loadUserData(viewedUsername);
 
-    const deleteBtn = document.getElementById('delete-user-btn');
+    // Przygotuj usuwanie konta
+    if (deleteBtn) {
+        if (!isOwnProfile && loggedInUserRole === 'admin') {
+            // Admin widzi cudzy profil (nie-admina) — przycisk zawsze widoczny
+            const res = await fetch(`http://localhost:3000/api/user/${viewedUsername}`);
+            const targetData = await res.json();
 
-    if (!isOwnProfile && originalUsername && viewedUsername) {
-        // Sprawd?, czy zalogowany to admin
-        const res = await fetch(`http://localhost:3000/api/user/${originalUsername}`);
-        const loggedInData = await res.json();
+            if (targetData.role !== 'admin') {
+                deleteBtn.classList.remove('hidden');
+                deleteBtn.addEventListener('click', async () => {
+                    if (confirm(`Czy na pewno chcesz usun?? konto "${viewedUsername}"?`)) {
+                        const delRes = await fetch(`http://localhost:3000/api/user/${viewedUsername}`, {
+                            method: 'DELETE'
+                        });
 
-        const targetRes = await fetch(`http://localhost:3000/api/user/${viewedUsername}`);
-        const targetData = await targetRes.json();
+                        if (delRes.ok) {
+                            alert(`U?ytkownik "${viewedUsername}" zosta? usuni?ty.`);
+                            window.location.href = '../index.html';
+                        } else {
+                            const err = await delRes.json();
+                            alert('B??d usuwania: ' + err.message);
+                        }
+                    }
+                });
+            }
+        }
 
-        if (loggedInData.role === 'admin' && targetData.role !== 'admin') {
-            deleteBtn.classList.remove('hidden');
+        if (isOwnProfile) {
+            // Przycisk widoczny dopiero po wej?ciu w edycj?
+            editBtn.addEventListener('click', () => {
+                deleteBtn.classList.remove('hidden');
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                deleteBtn.classList.add('hidden');
+            });
+
             deleteBtn.addEventListener('click', async () => {
-                if (confirm(`Czy na pewno chcesz usun?? konto "${viewedUsername}"?`)) {
-                    const delRes = await fetch(`http://localhost:3000/api/user/${viewedUsername}`, {
+                const confirmed = confirm("Czy na pewno chcesz usun?? swoje konto? Tej operacji nie mo?na cofn??.");
+                if (!confirmed) return;
+
+                try {
+                    const res = await fetch(`http://localhost:3000/api/user/${originalUsername}`, {
                         method: 'DELETE'
                     });
 
-                    if (delRes.ok) {
-                        alert(`U?ytkownik "${viewedUsername}" zosta? usuni?ty.`);
-                        window.location.href = '../index.html';
+                    if (res.ok) {
+                        alert("Twoje konto zosta?o usuni?te.");
+                        localStorage.removeItem("loggedInUser");
+                        window.location.href = "/index.html";
                     } else {
-                        const err = await delRes.json();
-                        alert('B??d usuwania: ' + err.message);
+                        const err = await res.json();
+                        alert("B??d podczas usuwania konta: " + err.message);
                     }
+                } catch (error) {
+                    alert("B??d po??czenia z serwerem.");
+                    console.error(error);
                 }
             });
         }
     }
 
+    // Tryb edycji (tylko swój profil)
+    if (isOwnProfile) {
+        editBtn.addEventListener('click', () => {
+            viewMode.classList.add('hidden');
+            editMode.classList.remove('hidden');
+        });
 
-    if (!isOwnProfile) return;
+        cancelBtn.addEventListener('click', () => {
+            editMode.classList.add('hidden');
+            viewMode.classList.remove('hidden');
+            document.getElementById('profile-image').src = originalImageSrc;
+            imageInput.value = '';
+        });
 
-    // Tryb edycji - tylko dla w?a?ciciela
-    editBtn.addEventListener('click', () => {
-        viewMode.classList.add('hidden');
-        editMode.classList.remove('hidden');
-    });
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profile-image').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
-    cancelBtn.addEventListener('click', () => {
-        editMode.classList.add('hidden');
-        viewMode.classList.remove('hidden');
-        document.getElementById('profile-image').src = originalImageSrc;
-        imageInput.value = '';
-    });
+        document.getElementById('edit-mode').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-    imageInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('profile-image').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+            const newUsername = document.getElementById('edit-username').value;
+            const gender = document.getElementById('edit-gender').value;
+            const description = document.getElementById('edit-description').value;
+            const file = imageInput.files[0];
 
-    document.getElementById('edit-mode').addEventListener('submit', async (e) => {
-        e.preventDefault();
+            const formData = new FormData();
+            formData.append('username', newUsername);
+            formData.append('gender', gender);
+            formData.append('description', description);
+            if (file) formData.append('profileImage', file);
 
-        const newUsername = document.getElementById('edit-username').value;
-        const gender = document.getElementById('edit-gender').value;
-        const description = document.getElementById('edit-description').value;
-        const file = imageInput.files[0];
+            try {
+                const response = await fetch(`http://localhost:3000/api/user/${originalUsername}`, {
+                    method: 'PUT',
+                    body: formData
+                });
 
-        const formData = new FormData();
-        formData.append('username', newUsername);
-        formData.append('gender', gender);
-        formData.append('description', description);
-        if (file) formData.append('profileImage', file);
+                const result = await response.json();
 
-        try {
-            const response = await fetch(`http://localhost:3000/api/user/${originalUsername}`, {
-                method: 'PUT',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                localStorage.setItem('loggedInUser', result.username);
-                saveMessage.innerText = '? Zmiany zapisane!';
-                saveMessage.style.color = 'green';
-                await loadUserData(result.username);
-                editMode.classList.add('hidden');
-                viewMode.classList.remove('hidden');
-            } else {
-                saveMessage.innerText = '? B??d: ' + result.message;
+                if (response.ok) {
+                    localStorage.setItem('loggedInUser', result.username);
+                    saveMessage.innerText = '? Zmiany zapisane!';
+                    saveMessage.style.color = 'green';
+                    await loadUserData(result.username);
+                    editMode.classList.add('hidden');
+                    viewMode.classList.remove('hidden');
+                    deleteBtn.classList.add('hidden');
+                } else {
+                    saveMessage.innerText = '? B??d: ' + result.message;
+                    saveMessage.style.color = 'red';
+                }
+            } catch (err) {
+                console.error(err);
+                saveMessage.innerText = '? B??d po??czenia z serwerem';
                 saveMessage.style.color = 'red';
             }
-        } catch (err) {
-            console.error(err);
-            saveMessage.innerText = '? B??d po??czenia z serwerem';
-            saveMessage.style.color = 'red';
-        }
 
-        saveMessage.classList.remove('hidden');
-        setTimeout(() => saveMessage.classList.add('hidden'), 4000);
-    });
+            saveMessage.classList.remove('hidden');
+            setTimeout(() => saveMessage.classList.add('hidden'), 4000);
+        });
+    }
 });
