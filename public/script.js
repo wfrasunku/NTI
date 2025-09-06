@@ -114,9 +114,22 @@ window.addEventListener('DOMContentLoaded', () => {
         fetch('http://localhost:3000/api/users')
             .then(res => res.json())
             .then(users => {
-                users.forEach(u => {
+                // ?? Najpierw admini
+                const sortedUsers = users.sort((a, b) => {
+                    if (a.role === 'admin' && b.role !== 'admin') return -1;
+                    if (a.role !== 'admin' && b.role === 'admin') return 1;
+                    return a.username.localeCompare(b.username); // alfabetycznie
+                });
+
+                sortedUsers.forEach(u => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<a href="/account/account.html?user=${u.username}">${u.username}</a>`;
+                    const isAdmin = u.role === 'admin';
+
+                    li.innerHTML = `
+        <a href="/account/account.html?user=${u.username}" class="${isAdmin ? 'admin-user' : ''}">
+          ${u.username}
+        </a>
+      `;
                     userList.appendChild(li);
                 });
             })

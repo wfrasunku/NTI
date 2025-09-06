@@ -238,3 +238,12 @@ body, html {
 .hidden {
     display: none !important;
 }
+a.admin-user {
+    color: red !important;
+    font-weight: bold;
+}
+
+    a.admin-user::before {
+        content: "🛡️ ";
+        margin-right: 5px;
+    }
