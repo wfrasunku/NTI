@@ -1,6 +1,8 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #ecf0f1;
+    font-family: 'Irish Grover', sans-serif;
+    font-size: 28px;
+    background: url("../images/Login/loginBackground.png") no-repeat center center;
+    background-size: cover;
     height: 100vh;
     margin: 0;
     display: flex;
@@ -9,10 +11,7 @@ body {
 }
 
 .container {
-    background: white;
-    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
 }
@@ -48,3 +47,61 @@ a {
     margin-top: 10px;
     color: red;
 }
+
+#back-to-main {
+    position: fixed;
+    top: 70px;
+    left: 115px;
+    z-index: 1000;
+}
+
+    #back-to-main img {
+        width: 100px;
+        height: 100px;
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+
+        #back-to-main img:hover {
+            opacity: 1;
+        }
+
+.message-space {
+    min-height: 24px; /* zapobiega przesuwaniu */
+    margin-top: 10px;
+}
+
+.login-message {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+    .login-message.visible {
+        opacity: 1;
+    }
+
+
+.switcher {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+    .switcher button {
+        padding: 8px 16px;
+        border: none;
+        background: #2c3e50;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .switcher button:hover {
+            background: #34495e;
+        }
+

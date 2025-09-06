@@ -2,18 +2,71 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Logowanie</title>
+    <title>Logowanie / Rejestracja</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <a href="../index.html" id="back-to-main">
+        <img src="../images/logo.png" alt="Powrót" />
+    </a>
+
     <div class="container">
-        <h2>Logowanie</h2>
-        <input type="text" id="loginUsername" placeholder="Login">
-        <input type="password" id="loginPassword" placeholder="Hasło">
-        <button onclick="login()">Zaloguj</button>
-        <p><a href="register.html">Nie masz konta? Zarejestruj się</a></p>
-        <p id="message"></p>
+
+        <!-- FORMULARZ LOGOWANIA -->
+        <div id="login-form">
+            <h2>Logowanie</h2>
+            <input type="text" id="loginUsername" placeholder="Login">
+            <input type="password" id="loginPassword" placeholder="Hasło">
+            <button onclick="login()">Zaloguj</button>
+            <p><a href="#" id="show-register-link">Nie masz konta? Zarejestruj się</a></p>
+        </div>
+
+        <!-- FORMULARZ REJESTRACJI -->
+        <div id="register-form" style="display: none;">
+            <h2>Rejestracja</h2>
+            <input type="text" id="registerUsername" placeholder="Nowy login">
+            <input type="password" id="registerPassword" placeholder="Hasło">
+            <select id="roleSelect">
+                <option value="user">Użytkownik</option>
+                <option value="admin">Administrator</option>
+            </select>
+            <button onclick="register()">Zarejestruj się</button>
+            <p><a href="#" id="show-login-link">Masz już konto? Zaloguj się</a></p>
+        </div>
+
+        <!-- Komunikaty -->
+        <div class="message-space">
+            <p id="message" class="login-message"></p>
+        </div>
     </div>
+
     <script src="script.js"></script>
+
+    <script>
+        // przełączanie formularzy
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const message = document.getElementById('message');
+
+            document.getElementById('show-register-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                message.innerText = '';
+                message.classList.remove('visible');
+            });
+
+            document.getElementById('show-login-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                message.innerText = '';
+                message.classList.remove('visible');
+            });
+        });
+    </script>
 </body>
 </html>
