@@ -55,6 +55,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await loadUserData(viewedUsername);
 
+    const deleteBtn = document.getElementById('delete-user-btn');
+
+    if (!isOwnProfile && originalUsername && viewedUsername) {
+        // Sprawd?, czy zalogowany to admin
+        const res = await fetch(`http://localhost:3000/api/user/${originalUsername}`);
+        const loggedInData = await res.json();
+
+        const targetRes = await fetch(`http://localhost:3000/api/user/${viewedUsername}`);
+        const targetData = await targetRes.json();
+
+        if (loggedInData.role === 'admin' && targetData.role !== 'admin') {
+            deleteBtn.classList.remove('hidden');
+            deleteBtn.addEventListener('click', async () => {
+                if (confirm(`Czy na pewno chcesz usun?? konto "${viewedUsername}"?`)) {
+                    const delRes = await fetch(`http://localhost:3000/api/user/${viewedUsername}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (delRes.ok) {
+                        alert(`U?ytkownik "${viewedUsername}" zosta? usuni?ty.`);
+                        window.location.href = '../index.html';
+                    } else {
+                        const err = await delRes.json();
+                        alert('B??d usuwania: ' + err.message);
+                    }
+                }
+            });
+        }
+    }
+
+
     if (!isOwnProfile) return;
 
     // Tryb edycji - tylko dla w?a?ciciela
