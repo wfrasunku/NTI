@@ -87,7 +87,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem('loggedInUser');
 
     if (user) {
-        userInfo.innerHTML = `Witaj, ${user} <button id="logoutBtn">Wyloguj</button>`;
+        userInfo.innerHTML = `
+  <a href="/account/account.html" id="profile-link">Witaj, ${user}</a>
+  <button id="logoutBtn">Wyloguj</button>
+`;
         document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('loggedInUser');
             localStorage.removeItem('hasSeenLoader'); // ? reset loadera

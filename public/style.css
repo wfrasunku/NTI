@@ -178,3 +178,11 @@ body, html {
     #logoutBtn:hover {
         background-color: #c0392b;
     }
+
+#profile-link {
+    color: white;
+    font-weight: bold;
+    margin-right: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -43,6 +43,7 @@ async function register() {
     const username = document.getElementById('registerUsername').value;
     const password = document.getElementById('registerPassword').value;
     const role = document.getElementById('roleSelect').value;
+    const gender = document.getElementById('registerGender').value;
 
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -55,7 +56,8 @@ async function register() {
         const response = await fetch('http://localhost:3000/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, role })
+            body: JSON.stringify({ username, password, role, gender })
+
         });
 
         const data = await response.json();

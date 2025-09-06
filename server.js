@@ -18,7 +18,7 @@ mongoose.connect('mongodb://localhost:27017/loginApp', {
 
 // Rejestracja
 app.post('/api/register', async (req, res) => {
-    const { username, password, role } = req.body;
+    const { username, password, role, gender } = req.body;
     const existingUser = await User.findOne({ username });
 
     if (existingUser) {
@@ -26,7 +26,19 @@ app.post('/api/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashedPassword, role });
+    const profileImage = gender === 'female'
+        ? '/images/default-female.png'
+        : '/images/default-male.png';
+
+    const user = new User({
+        username,
+        password: hashedPassword,
+        role,
+        gender,
+        profileImage,
+        description: 'Brak opisu',
+        createdAt: new Date()
+    });
     await user.save();
 
     res.status(201).json({ message: 'Rejestracja zakończona sukcesem!' });
@@ -51,4 +63,17 @@ app.post('/api/login', async (req, res) => {
 
 app.listen(3000, () => {
     console.log("🚀 Serwer działa na http://localhost:3000");
+});
+
+app.get('/api/user/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('-password -__v');
+        if (!user) {
+            return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
+        }
+        res.json(user);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Błąd serwera' });
+    }
 });
