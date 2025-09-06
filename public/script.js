@@ -14,3 +14,40 @@ document.addEventListener("mousemove", (e) => {
     layer.el.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
   });
 });
+
+/* ================== TOOLTIP + LINKI ================== */
+const tooltip = document.getElementById("tooltip");
+let tooltipTimeout;
+
+document.querySelectorAll(".hover-object").forEach(obj => {
+  obj.addEventListener("mouseenter", (e) => {
+    const message = obj.dataset.message || "Brak opisu";
+
+    tooltipTimeout = setTimeout(() => {
+      tooltip.textContent = message;
+      tooltip.style.display = "block";
+      tooltip.style.opacity = "1";
+      tooltip.style.left = e.clientX + 15 + "px";
+      tooltip.style.top = e.clientY + 15 + "px";
+    }, 500);
+  });
+
+  obj.addEventListener("mousemove", (e) => {
+    if (tooltip.style.display === "block") {
+      tooltip.style.left = e.clientX + 15 + "px";
+      tooltip.style.top = e.clientY + 15 + "px";
+    }
+  });
+
+  obj.addEventListener("mouseleave", () => {
+    clearTimeout(tooltipTimeout);
+    tooltip.style.opacity = "0";
+    tooltip.style.display = "none";
+  });
+
+  obj.addEventListener("click", () => {
+    const link = obj.dataset.link;
+    if (link) window.location.href = link;
+  });
+});
+

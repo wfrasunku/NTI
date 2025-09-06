@@ -41,6 +41,22 @@ body, html {
   pointer-events: none;
 }
 
+#tooltip {
+  position: fixed;
+  display: none; /* domyślnie ukryty */
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffd78b;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 99999; /* wyższy niż obiekty */
+  white-space: nowrap;
+}
+
+
 /* ================== INTERAKTYWNE OBIEKTY ================== */
 .hover-object {
   position: absolute;
