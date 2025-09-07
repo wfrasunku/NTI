@@ -43,7 +43,7 @@ mongoose.connect('mongodb://localhost:27017/loginApp', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log("✅ Połączono z MongoDB"))
-  .catch(err => console.error("❌ Błąd MongoDB:", err));
+    .catch(err => console.error("❌ Błąd MongoDB:", err));
 
 // ================== ROUTES ==================
 app.use('/api', userRoutes);

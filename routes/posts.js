@@ -37,7 +37,6 @@ router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {
 
         if (!req.session.user) return res.status(401).json({ message: 'Nie zalogowany' });
 
-        // Pobierz użytkownika z bazy
         const author = await User.findOne({ username: req.session.user.username });
         if (!author) return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
 
@@ -46,7 +45,7 @@ router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {
         const post = new Post({
             content,
             type,
-            author: author._id,   // <-- używamy ObjectId
+            author: author._id,
             images,
             createdAt: new Date()
         });

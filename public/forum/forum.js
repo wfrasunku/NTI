@@ -103,7 +103,6 @@ async function addPost() {
     } catch (err) { console.error(err); }
 }
 
-
 // ====== Renderowanie postów ======
 function renderPosts() {
     const container = document.getElementById('posts-container');
@@ -155,7 +154,7 @@ function renderPosts() {
             imagesDiv.className = 'post-images';
             post.images.forEach(imgPath => {
                 const img = document.createElement('img');
-                img.src = imgPath; 
+                img.src = imgPath;
                 img.style.width = '100px';
                 img.style.margin = '5px';
                 img.style.cursor = 'pointer';
@@ -190,7 +189,6 @@ function renderPosts() {
             postDiv.appendChild(imagesDiv);
         }
 
-
         // Komentarze
         post.comments.forEach(comment => {
             const commentDiv = document.createElement('div');
@@ -223,7 +221,6 @@ function renderPosts() {
         container.appendChild(postDiv);
     });
 }
-
 
 // ====== Usuwanie postu ======
 async function deletePost(postId) {

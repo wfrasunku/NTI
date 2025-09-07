@@ -102,8 +102,6 @@ router.put('/user/:username', uploadProfile.single('profileImage'), async (req, 
     }
 });
 
-
-
 // Lista użytkowników
 router.get('/users', async (req, res) => {
     try {

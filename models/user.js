@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
     profileImage: { type: String, default: '/images/default-profile.png' },
     createdAt: { type: Date, default: Date.now },
     gender: { type: String, enum: ['male', 'female'], required: true }
-
 });
 
 module.exports = mongoose.model('User', userSchema);
