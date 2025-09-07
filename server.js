@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -27,7 +26,11 @@ app.use(session({
 
 // ================== MULTER ==================
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'public/uploads/'),
+    destination: (req, file, cb) => {
+        if (file.fieldname === 'profileImage') cb(null, 'public/uploads/profile/');
+        else if (file.fieldname === 'images') cb(null, 'public/uploads/posts/');
+        else cb(null, 'public/uploads/');
+    },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + ext);
@@ -35,18 +38,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Middleware dodające multer do req (dla routes)
-app.use((req, res, next) => {
-    req.upload = upload;
-    next();
-});
-
 // ================== POŁĄCZENIE Z MONGODB ==================
 mongoose.connect('mongodb://localhost:27017/loginApp', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log("✅ Połączono z MongoDB"))
-    .catch(err => console.error("❌ Błąd MongoDB:", err));
+  .catch(err => console.error("❌ Błąd MongoDB:", err));
 
 // ================== ROUTES ==================
 app.use('/api', userRoutes);

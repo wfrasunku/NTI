@@ -27,6 +27,18 @@
         <!-- Dodawanie postów (tylko zalogowani) -->
         <div id="new-post-section" class="hidden">
             <textarea id="post-content" placeholder="Napisz nowy post..." rows="3"></textarea><br>
+
+            <label for="post-type">Typ posta:</label>
+            <select id="post-type">
+                <option value="Asking for help">Asking for help</option>
+                <option value="Feature Idea">Feature Idea</option>
+                <option value="Bug report">Bug report</option>
+                <option value="Just talking">Just talking</option>
+            </select><br>
+
+            <label for="post-images">Dodaj zdjęcia:</label>
+            <input type="file" id="post-images" multiple accept="image/*"><br>
+
             <button id="add-post-btn">Dodaj post</button>
         </div>
 

@@ -1,8 +1,21 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const path = require('path');
+const multer = require('multer');
 const User = require('../models/user');
 
 const router = express.Router();
+
+// Multer zdjęcia profilowego
+const profileStorage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'public/uploads/profiles'),
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, Date.now() + '-' + Math.round(Math.random() * 1e9) + ext);
+    }
+});
+
+const uploadProfile = multer({ storage: profileStorage });
 
 // Rejestracja
 router.post('/register', async (req, res) => {
@@ -66,20 +79,30 @@ router.get('/user/:username', async (req, res) => {
 });
 
 // Edycja użytkownika
-router.put('/user/:username', async (req, res) => {
+router.put('/user/:username', uploadProfile.single('profileImage'), async (req, res) => {
     try {
         const { username, description, gender } = req.body;
         const currentUsername = req.params.username;
         const update = { username, description, gender };
-        if (req.file) update.profileImage = `/uploads/${req.file.filename}`;
 
-        const updatedUser = await User.findOneAndUpdate({ username: currentUsername }, update, { new: true });
+        if (req.file) {
+            update.profileImage = `/uploads/profiles/${req.file.filename}`;
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+            { username: currentUsername },
+            update,
+            { new: true }
+        );
+
         if (!updatedUser) return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
         res.json(updatedUser);
     } catch (err) {
         res.status(500).json({ message: 'Błąd serwera' });
     }
 });
+
+
 
 // Lista użytkowników
 router.get('/users', async (req, res) => {

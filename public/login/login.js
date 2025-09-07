@@ -1,43 +1,36 @@
-// Dostosuj URL je?li zmienisz port/backend
 const API = 'http://localhost:3000/api';
 
 async function login() {
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
-
     const message = document.getElementById('message');
     message.classList.remove('visible');
     message.innerText = '';
 
     try {
-        const response = await fetch('http://localhost:3000/api/login', {
+        const res = await fetch(`${API}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
+            credentials: 'include'
         });
+        const data = await res.json();
 
-        const data = await response.json();
-
-        if (response.ok) {
-            // Zalogowano
+        if (res.ok) {
             localStorage.setItem('loggedInUser', username);
             window.location.href = '../index.html';
         } else {
-            // ? B??d logowania ? zawsze ustaw czerwony kolor
             message.style.color = 'red';
-            message.innerText = data.message || 'B??d logowania';
+            message.innerText = data.message || 'Błąd logowania';
             message.classList.add('visible');
         }
-
-    } catch (error) {
-        console.error('B??d:', error);
+    } catch (err) {
+        console.error(err);
         message.style.color = 'red';
-        message.innerText = 'Nie mo?na po??czy? z serwerem';
+        message.innerText = 'Nie można połączyć się z serwerem';
         message.classList.add('visible');
     }
 }
-
-
 
 async function register() {
     const username = document.getElementById('registerUsername').value;
@@ -48,49 +41,34 @@ async function register() {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const message = document.getElementById('message');
-
     message.innerText = '';
     message.classList.remove('visible');
 
     try {
-        const response = await fetch('http://localhost:3000/api/register', {
+        const res = await fetch(`${API}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, role, gender })
-
+            body: JSON.stringify({ username, password, role, gender }),
+            credentials: 'include'
         });
+        const data = await res.json();
 
-        const data = await response.json();
-
-        if (response.ok) {
+        if (res.ok) {
             message.style.color = 'green';
-            message.innerText = "? Uda?o si? zarejestrowa?! Mo?esz si? zalogowa?.";
+            message.innerText = "✅ Rejestracja zakończona sukcesem!";
             message.classList.add('visible');
-
-            // poka? formularz logowania
             registerForm.style.display = 'none';
             loginForm.style.display = 'block';
-
-            // znikanie po 3s
-            setTimeout(() => {
-                message.classList.remove('visible');
-                setTimeout(() => {
-                    message.innerText = '';
-                }, 1000);
-            }, 3000);
+            setTimeout(() => message.classList.remove('visible'), 4000);
         } else {
             message.style.color = 'red';
-            message.innerText = data.message || 'B??d rejestracji';
+            message.innerText = data.message || 'Błąd rejestracji';
             message.classList.add('visible');
         }
-
-    } catch (error) {
-        console.error('B??d:', error);
+    } catch (err) {
+        console.error(err);
         message.style.color = 'red';
-        message.innerText = 'Nie mo?na po??czy? z serwerem';
+        message.innerText = 'Nie można połączyć się z serwerem';
         message.classList.add('visible');
     }
 }
-
-
-localStorage.setItem('loggedInUser', username);

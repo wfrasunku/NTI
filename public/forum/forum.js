@@ -76,21 +76,33 @@ async function renderUserList() {
 // ====== Dodawanie postu ======
 async function addPost() {
     const content = document.getElementById('post-content').value.trim();
+    const type = document.getElementById('post-type').value;
+    const files = document.getElementById('post-images').files;
+
     if (!content) return;
+
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('type', type);
+
+    for (let i = 0; i < files.length; i++) {
+        formData.append('images', files[i]);
+    }
 
     try {
         const res = await fetch(`${API}/posts`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content })
+            body: formData
         });
         if (res.ok) {
             posts = await (await fetch(`${API}/posts`)).json();
             document.getElementById('post-content').value = '';
+            document.getElementById('post-images').value = '';
             renderPosts();
         }
     } catch (err) { console.error(err); }
 }
+
 
 // ====== Renderowanie postów ======
 function renderPosts() {
@@ -137,6 +149,48 @@ function renderPosts() {
 
         postDiv.appendChild(actions);
 
+        // Zdjęcia
+        if (post.images && post.images.length > 0) {
+            const imagesDiv = document.createElement('div');
+            imagesDiv.className = 'post-images';
+            post.images.forEach(imgPath => {
+                const img = document.createElement('img');
+                img.src = imgPath; 
+                img.style.width = '100px';
+                img.style.margin = '5px';
+                img.style.cursor = 'pointer';
+
+                // powiększenie po kliknięciu
+                img.addEventListener('click', () => {
+                    const modal = document.createElement('div');
+                    modal.style.position = 'fixed';
+                    modal.style.top = '0';
+                    modal.style.left = '0';
+                    modal.style.width = '100%';
+                    modal.style.height = '100%';
+                    modal.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                    modal.style.display = 'flex';
+                    modal.style.alignItems = 'center';
+                    modal.style.justifyContent = 'center';
+                    modal.style.zIndex = '10000';
+
+                    const modalImg = document.createElement('img');
+                    modalImg.src = imgPath;
+                    modalImg.style.maxWidth = '90%';
+                    modalImg.style.maxHeight = '90%';
+                    modal.appendChild(modalImg);
+
+                    modal.addEventListener('click', () => document.body.removeChild(modal));
+
+                    document.body.appendChild(modal);
+                });
+
+                imagesDiv.appendChild(img);
+            });
+            postDiv.appendChild(imagesDiv);
+        }
+
+
         // Komentarze
         post.comments.forEach(comment => {
             const commentDiv = document.createElement('div');
@@ -171,13 +225,14 @@ function renderPosts() {
 }
 
 
-// ====== Akcje ======
+// ====== Usuwanie postu ======
 async function deletePost(postId) {
     await fetch(`${API}/posts/${postId}`, { method: 'DELETE' });
     posts = posts.filter(p => p._id !== postId);
     renderPosts();
 }
 
+// ====== Edycja postu ======
 async function editPost(postId) {
     const newContent = prompt("Edytuj post:");
     if (!newContent) return;
@@ -190,6 +245,7 @@ async function editPost(postId) {
     renderPosts();
 }
 
+// ====== Dodanie komentarza ======
 async function addComment(postId) {
     const content = document.getElementById(`comment-input-${postId}`).value.trim();
     if (!content) return;
@@ -202,6 +258,7 @@ async function addComment(postId) {
     renderPosts();
 }
 
+// ====== Edycja komentarza ======
 async function editComment(postId, commentId) {
     const newContent = prompt("Edytuj komentarz:");
     if (!newContent) return;
@@ -214,18 +271,21 @@ async function editComment(postId, commentId) {
     renderPosts();
 }
 
+// ====== Usuwanie komentarza ======
 async function deleteComment(postId, commentId) {
     await fetch(`${API}/posts/${postId}/comments/${commentId}`, { method: 'DELETE' });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
 }
 
+// ====== Likowanie postu ======
 async function likePost(postId) {
     await fetch(`${API}/posts/${postId}/like`, { method: 'POST' });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
 }
 
+// ====== Dislikowanie postu ======
 async function dislikePost(postId) {
     await fetch(`${API}/posts/${postId}/dislike`, { method: 'POST' });
     posts = await (await fetch(`${API}/posts`)).json();

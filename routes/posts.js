@@ -1,8 +1,21 @@
 const express = require('express');
 const Post = require('../models/post');
 const User = require('../models/user');
+const multer = require('multer');
+const path = require('path');
 
 const router = express.Router();
+
+// Multer do zdjęć postów
+const postStorage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'public/uploads/posts'),
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, Date.now() + '-' + Math.round(Math.random() * 1e9) + ext);
+    }
+});
+
+const uploadPosts = multer({ storage: postStorage });
 
 // Pobranie wszystkich postów
 router.get('/posts', async (req, res) => {
@@ -18,17 +31,36 @@ router.get('/posts', async (req, res) => {
 });
 
 // Dodanie postu
-router.post('/posts', async (req, res) => {
-    if (!req.session.user) return res.status(401).json({ message: 'Nie zalogowany' });
+router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {
+    try {
+        const { content, type } = req.body;
 
-    const user = await User.findOne({ username: req.session.user.username });
-    const post = new Post({ author: user._id, content: req.body.content });
-    await post.save();
+        if (!req.session.user) return res.status(401).json({ message: 'Nie zalogowany' });
 
-    const fullPost = await Post.findById(post._id)
-        .populate('author', 'username _id')
-        .populate('comments.author', 'username _id');
-    res.json(fullPost);
+        // Pobierz użytkownika z bazy
+        const author = await User.findOne({ username: req.session.user.username });
+        if (!author) return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
+
+        const images = req.files ? req.files.map(f => '/uploads/posts/' + f.filename) : [];
+
+        const post = new Post({
+            content,
+            type,
+            author: author._id,   // <-- używamy ObjectId
+            images,
+            createdAt: new Date()
+        });
+
+        await post.save();
+        const fullPost = await Post.findById(post._id)
+            .populate('author', 'username _id')
+            .populate('comments.author', 'username _id');
+
+        res.status(201).json(fullPost);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Błąd tworzenia posta' });
+    }
 });
 
 // Edycja postu
