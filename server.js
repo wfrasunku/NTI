@@ -31,7 +31,7 @@ mongoose.connect('mongodb://localhost:27017/loginApp', {
 
 // Sesje
 app.use(session({
-    secret: 'RadoslawBednarskiSuperSecretKeyForNowoczesneTechnologieInformatyczneThatNowoneWillGuess', 
+    secret: 'RadoslawBednarskiSuperSecretKeyForNowoczesneTechnologieInformatyczneThatNooneWillGuess2137', 
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/loginApp' }),
