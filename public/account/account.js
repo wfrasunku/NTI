@@ -144,15 +144,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (backBtn) {
-    backBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // nie przeładowuje linku
-        if (history.length > 1) {
-            history.back(); // wraca do poprzedniej strony
-        } else {
-            window.location.href = '/index.html'; // jeśli brak historii, idzie na stronę główną
-        }
-    });
-}
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // nie przeładowuje linku
+            if (history.length > 1) {
+                history.back(); // wraca do poprzedniej strony
+            } else {
+                window.location.href = '/index.html'; // jeśli brak historii, idzie na stronę główną
+            }
+        });
+    }
 
     // Tryb edycji
     if (isOwnProfile) {

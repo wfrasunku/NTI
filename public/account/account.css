@@ -21,17 +21,17 @@ body {
     width: 400px;
 }
 
-    .profile-container img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 15px;
-    }
+.profile-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
 
-    .profile-container p {
-        margin: 5px 0;
-    }
+.profile-container p {
+    margin: 5px 0;
+}
 
 .back-button {
     display: inline-block;
@@ -44,9 +44,9 @@ body {
     transition: background 0.3s ease;
 }
 
-    .back-button:hover {
-        background-color: #3498db;
-    }
+.back-button:hover {
+    background-color: #3498db;
+}
 
 textarea {
     width: 100%;
@@ -69,9 +69,9 @@ button#save-profile {
     cursor: pointer;
 }
 
-    button#save-profile:hover {
-        background-color: #2ecc71;
-    }
+button#save-profile:hover {
+    background-color: #2ecc71;
+}
 
 #save-message {
     margin-top: 10px;
@@ -98,30 +98,31 @@ button#save-profile {
     cursor: pointer;
 }
 
-    #edit-profile-toggle:hover {
-        background-color: #2980b9;
-    }
+#edit-profile-toggle:hover {
+    background-color: #2980b9;
+}
 
 form#edit-mode {
     margin-top: 20px;
     text-align: left;
 }
 
-    form#edit-mode label {
-        font-weight: bold;
-        display: block;
-        margin-top: 10px;
-    }
+form#edit-mode label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
 
-    form#edit-mode input[type="text"],
-    form#edit-mode select,
-    form#edit-mode textarea {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
+form#edit-mode input[type="text"],
+form#edit-mode select,
+form#edit-mode textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 #edit-image::-webkit-file-upload-button {
     visibility: hidden;
 }
@@ -169,9 +170,10 @@ form#edit-mode {
     margin-top: 15px;
 }
 
-    #delete-user-btn:hover {
-        background-color: #c0392b;
-    }
+#delete-user-btn:hover {
+    background-color: #c0392b;
+}
+
 button.danger {
     background-color: #e74c3c;
     color: white;
@@ -182,6 +184,6 @@ button.danger {
     cursor: pointer;
 }
 
-    button.danger:hover {
-        background-color: #c0392b;
-    }
+button.danger:hover {
+    background-color: #c0392b;
+}

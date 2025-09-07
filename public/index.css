@@ -1,77 +1,80 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100%;
-  background: #000;
+body,
+html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    background: #000;
 }
 
 .parallax {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 110%;
-  height: 110%;
-  background-size: cover;
-  background-position: center;
-  will-change: transform;
-  transition: transform 0.1s ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110%;
+    height: 110%;
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+    transition: transform 0.1s ease-out;
 }
 
 /* ================== WARSTWY PARALAXY ================== */
 #layer-back {
-  background-image: url("images/Paralax_back.png");
-  z-index: 1;
+    background-image: url("images/Paralax_back.png");
+    z-index: 1;
 }
 
 #layer-front {
-  background-image: url("images/Paralax_front.png");
-  z-index: 2;
+    background-image: url("images/Paralax_front.png");
+    z-index: 2;
 }
 
 #layer-objects {
-  z-index: 3;
-  pointer-events: none;
+    z-index: 3;
+    pointer-events: none;
 }
 
 #tooltip {
-  position: fixed;
-  display: none; /* domyślnie ukryty */
-  background: rgba(0, 0, 0, 0.85);
-  color: #ffd78b;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 14px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: 99999; /* wyższy niż obiekty */
-  white-space: nowrap;
+    position: fixed;
+    display: none;
+    /* domyślnie ukryty */
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffd78b;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 99999;
+    /* wyższy niż obiekty */
+    white-space: nowrap;
 }
 
 
 /* ================== INTERAKTYWNE OBIEKTY ================== */
 .hover-object {
-  position: absolute;
-  width: auto;
-  height: auto;
-  transform: scale(1.1);
-  transition: transform 0.3s ease, filter 0.3s ease;
-  pointer-events: auto;
-  cursor: pointer;
-  z-index: 4;
+    position: absolute;
+    width: auto;
+    height: auto;
+    transform: scale(1.1);
+    transition: transform 0.3s ease, filter 0.3s ease;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 4;
 }
 
 .hover-object:hover {
-  transform: scale(1.2);
-  filter: brightness(120%) drop-shadow(0 0 15px rgba(255, 215, 139, 0.774));
+    transform: scale(1.2);
+    filter: brightness(120%) drop-shadow(0 0 15px rgba(255, 215, 139, 0.774));
 }
 
 /* ================== PRELOADER ================== */
@@ -88,7 +91,8 @@ body, html {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    transition: opacity 1.5s ease; /* płynne zanikanie */
+    transition: opacity 1.5s ease;
+    /* płynne zanikanie */
 }
 
 /* Logo */
@@ -100,18 +104,25 @@ body, html {
 
 /* Kontener ramki */
 .progress-bar {
-    width: 400px; /* szerokość ramki */
-    height: 80px; /* wysokość ramki */
+    width: 400px;
+    /* szerokość ramki */
+    height: 80px;
+    /* wysokość ramki */
     position: relative;
-    display: flex; /* wyśrodkowanie */
-    align-items: center; /* wertykalnie */
-    justify-content: center; /* horyzontalnie */
+    display: flex;
+    /* wyśrodkowanie */
+    align-items: center;
+    /* wertykalnie */
+    justify-content: center;
+    /* horyzontalnie */
 }
 
 /* Wrapper paska – teraz zawsze w centrum */
 .progress-wrapper {
-    width: 80%; /* szerokość paska, np. 60% ramki */
-    height: 53%; /* wysokość paska, np. 30% ramki */
+    width: 80%;
+    /* szerokość paska, np. 60% ramki */
+    height: 53%;
+    /* wysokość paska, np. 30% ramki */
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -159,11 +170,11 @@ body, html {
     font-family: Arial, sans-serif;
 }
 
-    #user-info-bar a {
-        color: #00bfff;
-        text-decoration: none;
-        margin-left: 8px;
-    }
+#user-info-bar a {
+    color: #00bfff;
+    text-decoration: none;
+    margin-left: 8px;
+}
 
 #logoutBtn {
     margin-left: 10px;
@@ -175,9 +186,9 @@ body, html {
     cursor: pointer;
 }
 
-    #logoutBtn:hover {
-        background-color: #c0392b;
-    }
+#logoutBtn:hover {
+    background-color: #c0392b;
+}
 
 #profile-link {
     color: white;
@@ -192,7 +203,7 @@ body, html {
     top: 60px;
     left: 0;
     width: 200px;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
     color: white;
     padding: 15px;
     border-right: 2px solid #444;
@@ -202,24 +213,24 @@ body, html {
     font-family: Arial, sans-serif;
 }
 
-    #sidebar h3 {
-        margin-top: 0;
-    }
+#sidebar h3 {
+    margin-top: 0;
+}
 
-    #sidebar ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-        #sidebar ul li {
-            margin-bottom: 8px;
-        }
+#sidebar ul li {
+    margin-bottom: 8px;
+}
 
-            #sidebar ul li a {
-                color: #00bfff;
-                text-decoration: none;
-            }
+#sidebar ul li a {
+    color: #00bfff;
+    text-decoration: none;
+}
 
 .sidebar-toggle {
     position: fixed;
@@ -238,15 +249,16 @@ body, html {
 .hidden {
     display: none !important;
 }
+
 a.admin-user {
     color: red !important;
     font-weight: bold;
 }
 
-    a.admin-user::after {
-        content: "🛡️ ";
-        margin-right: 5px;
-    }
+a.admin-user::after {
+    content: "🛡️ ";
+    margin-right: 5px;
+}
 
 .user-icon {
     width: 24px;

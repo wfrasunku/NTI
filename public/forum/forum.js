@@ -65,7 +65,7 @@ async function renderUserList() {
         userList.innerHTML = '';
         users.forEach(u => {
             const li = document.createElement('li');
-            li.innerHTML = `<a href="/account/account.html?user=${u.username}" class="${u.role==='admin'?'admin-user':''}">${u.username}</a>`;
+            li.innerHTML = `<a href="/account/account.html?user=${u.username}" class="${u.role === 'admin' ? 'admin-user' : ''}">${u.username}</a>`;
             userList.appendChild(li);
         });
     } catch (err) {
@@ -81,15 +81,15 @@ async function addPost() {
     try {
         const res = await fetch(`${API}/posts`, {
             method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({content})
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
         });
         if (res.ok) {
             posts = await (await fetch(`${API}/posts`)).json();
             document.getElementById('post-content').value = '';
             renderPosts();
         }
-    } catch(err) { console.error(err); }
+    } catch (err) { console.error(err); }
 }
 
 // ====== Renderowanie postów ======
@@ -130,7 +130,7 @@ function renderPosts() {
             if (currentUser._id === post.author._id) {
                 actions.innerHTML += `<button onclick="editPost('${post._id}')">Edytuj post</button>`;
             }
-            if (currentUser.role==='admin' || currentUser._id === post.author._id) {
+            if (currentUser.role === 'admin' || currentUser._id === post.author._id) {
                 actions.innerHTML += `<button onclick="deletePost('${post._id}')">Usuń post</button>`;
             }
         }
@@ -158,7 +158,7 @@ function renderPosts() {
                 if (currentUser._id === comment.author._id) {
                     commentDiv.innerHTML += ` <button onclick="editComment('${post._id}','${comment._id}')">Edytuj</button>`;
                 }
-                if (currentUser.role==='admin' || currentUser._id === comment.author._id) {
+                if (currentUser.role === 'admin' || currentUser._id === comment.author._id) {
                     commentDiv.innerHTML += ` <button onclick="deleteComment('${post._id}','${comment._id}')">Usuń</button>`;
                 }
             }
@@ -173,8 +173,8 @@ function renderPosts() {
 
 // ====== Akcje ======
 async function deletePost(postId) {
-    await fetch(`${API}/posts/${postId}`, { method:'DELETE' });
-    posts = posts.filter(p=>p._id!==postId);
+    await fetch(`${API}/posts/${postId}`, { method: 'DELETE' });
+    posts = posts.filter(p => p._id !== postId);
     renderPosts();
 }
 
@@ -182,9 +182,9 @@ async function editPost(postId) {
     const newContent = prompt("Edytuj post:");
     if (!newContent) return;
     await fetch(`${API}/posts/${postId}`, {
-        method:'PUT',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({content: newContent})
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: newContent })
     });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
@@ -194,9 +194,9 @@ async function addComment(postId) {
     const content = document.getElementById(`comment-input-${postId}`).value.trim();
     if (!content) return;
     await fetch(`${API}/posts/${postId}/comments`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({content})
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
     });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
@@ -206,28 +206,28 @@ async function editComment(postId, commentId) {
     const newContent = prompt("Edytuj komentarz:");
     if (!newContent) return;
     await fetch(`${API}/posts/${postId}/comments/${commentId}`, {
-        method:'PUT',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({content: newContent})
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: newContent })
     });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
 }
 
 async function deleteComment(postId, commentId) {
-    await fetch(`${API}/posts/${postId}/comments/${commentId}`, { method:'DELETE' });
+    await fetch(`${API}/posts/${postId}/comments/${commentId}`, { method: 'DELETE' });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
 }
 
 async function likePost(postId) {
-    await fetch(`${API}/posts/${postId}/like`, { method:'POST' });
+    await fetch(`${API}/posts/${postId}/like`, { method: 'POST' });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
 }
 
 async function dislikePost(postId) {
-    await fetch(`${API}/posts/${postId}/dislike`, { method:'POST' });
+    await fetch(`${API}/posts/${postId}/dislike`, { method: 'POST' });
     posts = await (await fetch(`${API}/posts`)).json();
     renderPosts();
 }

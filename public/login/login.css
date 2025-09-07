@@ -16,7 +16,8 @@ body {
     text-align: center;
 }
 
-input, select {
+input,
+select {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
@@ -34,9 +35,9 @@ button {
     cursor: pointer;
 }
 
-    button:hover {
-        background: #3498db;
-    }
+button:hover {
+    background: #3498db;
+}
 
 a {
     color: #2980b9;
@@ -55,20 +56,21 @@ a {
     z-index: 1000;
 }
 
-    #back-to-main img {
-        width: 100px;
-        height: 100px;
-        cursor: pointer;
-        opacity: 0.8;
-        transition: opacity 0.3s ease;
-    }
+#back-to-main img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
 
-        #back-to-main img:hover {
-            opacity: 1;
-        }
+#back-to-main img:hover {
+    opacity: 1;
+}
 
 .message-space {
-    height: 30px; /* sta?a wysoko??, niezale?na od tekstu */
+    height: 30px;
+    /* sta?a wysoko??, niezale?na od tekstu */
     margin-top: 10px;
     overflow: hidden;
 }
@@ -80,13 +82,14 @@ a {
     padding: 0;
     opacity: 0;
     transition: opacity 1s ease;
-    color: red; /* lub dynamicznie w JS */
+    color: red;
+    /* lub dynamicznie w JS */
     height: 100%;
 }
 
-    .login-message.visible {
-        opacity: 1;
-    }
+.login-message.visible {
+    opacity: 1;
+}
 
 
 .switcher {
@@ -96,16 +99,15 @@ a {
     margin-bottom: 20px;
 }
 
-    .switcher button {
-        padding: 8px 16px;
-        border: none;
-        background: #2c3e50;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+.switcher button {
+    padding: 8px 16px;
+    border: none;
+    background: #2c3e50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-        .switcher button:hover {
-            background: #34495e;
-        }
-
+.switcher button:hover {
+    background: #34495e;
+}
