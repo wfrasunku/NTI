@@ -87,51 +87,53 @@ window.addEventListener('DOMContentLoaded', async () => {
     const sidebar = document.getElementById('sidebar');
     const userList = document.getElementById('user-list');
 
+    let currentUser = null;
+
     try {
         const res = await fetch('http://localhost:3000/api/currentUser', {
             credentials: 'include'
         });
 
-        if (!res.ok) {
-            userInfo.innerHTML = `Nie jesteś zalogowany → <a href="login/login.html">Log in</a>`;
-            return;
-        }
+        if (res.ok) {
+            currentUser = await res.json();
 
-        const user = await res.json();
-
-        // Pokaz info zalogowanego użytkownika
-        const userDataRes = await fetch(`http://localhost:3000/api/user/${user.username}`, {
-            credentials: 'include'
-        });
-        const userData = await userDataRes.json();
-
-        const imgSrc = userData.profileImage || '/images/default-profile.png';
-        userInfo.innerHTML = `
-            <a href="/account/account.html" id="profile-link">
-                <img src="${imgSrc}" class="user-icon" />
-                ${userData.username}
-            </a>
-            <button id="logoutBtn">Wyloguj</button>
-        `;
-
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            await fetch('http://localhost:3000/api/logout', {
-                method: 'POST',
+            // Pobierz pełne dane użytkownika
+            const userDataRes = await fetch(`http://localhost:3000/api/user/${currentUser.username}`, {
                 credentials: 'include'
             });
-            window.location.reload();
-        });
+            const userData = await userDataRes.json();
+
+            const imgSrc = userData.profileImage || '/images/default-profile.png';
+            userInfo.innerHTML = `
+                <a href="/account/account.html" id="profile-link">
+                    <img src="${imgSrc}" class="user-icon" />
+                    ${userData.username}
+                </a>
+                <button id="logoutBtn">Wyloguj</button>
+            `;
+
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                await fetch('http://localhost:3000/api/logout', { method: 'POST', credentials: 'include' });
+                window.location.reload();
+            });
+
+            // ===== ZMIANA LINKU INTERAKTYWNEGO OBIEKTU DLA LOGIN =====
+            const drawer = document.querySelector('.hover-object[data-message="Login"]');
+            if (drawer) {
+                drawer.dataset.message = "Profil";
+                drawer.dataset.link = "/account/account.html";
+            }
+
+        } else {
+            userInfo.innerHTML = `Nie jesteś zalogowany → <a href="login/login.html">Log in</a>`;
+        }
 
         // Pokaż sidebar
         toggleSidebarBtn.classList.remove('hidden');
-        toggleSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-        });
+        toggleSidebarBtn.addEventListener('click', () => sidebar.classList.toggle('hidden'));
 
-        // Pobierz listę użytkowników
-        const usersRes = await fetch('http://localhost:3000/api/users', {
-            credentials: 'include'
-        });
+        // Lista użytkowników
+        const usersRes = await fetch('http://localhost:3000/api/users', { credentials: 'include' });
         const users = await usersRes.json();
 
         const sortedUsers = users.sort((a, b) => {
