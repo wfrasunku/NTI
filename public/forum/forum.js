@@ -100,7 +100,24 @@ function renderPosts() {
     posts.forEach(post => {
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
-        postDiv.innerHTML = `<b>${post.author.username}:</b> ${post.content}<br>Likes: ${post.likes || 0} | Dislikes: ${post.dislikes || 0}`;
+
+        // Nazwa autora jako link do jego profilu
+        const authorLink = document.createElement('a');
+        authorLink.href = `/account/account.html?user=${post.author.username}`;
+        authorLink.textContent = post.author.username;
+        authorLink.className = 'author-link';
+        authorLink.style.fontWeight = 'bold';
+        authorLink.style.marginRight = '5px';
+
+        const contentSpan = document.createElement('span');
+        contentSpan.textContent = `: ${post.content}`;
+
+        const likesSpan = document.createElement('div');
+        likesSpan.textContent = `Likes: ${post.likes || 0} | Dislikes: ${post.dislikes || 0}`;
+
+        postDiv.appendChild(authorLink);
+        postDiv.appendChild(contentSpan);
+        postDiv.appendChild(likesSpan);
 
         const actions = document.createElement('div');
         actions.className = 'post-actions';
@@ -108,15 +125,11 @@ function renderPosts() {
         if (currentUser) {
             actions.innerHTML += `<button onclick="likePost('${post._id}')">👍</button>`;
             actions.innerHTML += `<button onclick="dislikePost('${post._id}')">👎</button>`;
-
             actions.innerHTML += `<input id="comment-input-${post._id}" placeholder="Komentarz"> <button onclick="addComment('${post._id}')">Dodaj</button>`;
 
-            // Edytuj swój post
             if (currentUser._id === post.author._id) {
                 actions.innerHTML += `<button onclick="editPost('${post._id}')">Edytuj post</button>`;
             }
-
-            // Admin usuwa każdy post
             if (currentUser.role==='admin' || currentUser._id === post.author._id) {
                 actions.innerHTML += `<button onclick="deletePost('${post._id}')">Usuń post</button>`;
             }
@@ -124,18 +137,27 @@ function renderPosts() {
 
         postDiv.appendChild(actions);
 
-        // komentarze
+        // Komentarze
         post.comments.forEach(comment => {
             const commentDiv = document.createElement('div');
             commentDiv.className = 'comment';
-            commentDiv.innerHTML = `<i>${comment.author.username}:</i> ${comment.content}`;
+
+            const commentAuthorLink = document.createElement('a');
+            commentAuthorLink.href = `/account/account.html?user=${comment.author.username}`;
+            commentAuthorLink.textContent = comment.author.username;
+            commentAuthorLink.style.fontWeight = 'bold';
+            commentAuthorLink.style.marginRight = '5px';
+
+            const commentContent = document.createElement('span');
+            commentContent.textContent = `: ${comment.content}`;
+
+            commentDiv.appendChild(commentAuthorLink);
+            commentDiv.appendChild(commentContent);
 
             if (currentUser) {
-                // Edycja własnego komentarza
                 if (currentUser._id === comment.author._id) {
                     commentDiv.innerHTML += ` <button onclick="editComment('${post._id}','${comment._id}')">Edytuj</button>`;
                 }
-                // Admin usuwa każdy komentarz
                 if (currentUser.role==='admin' || currentUser._id === comment.author._id) {
                     commentDiv.innerHTML += ` <button onclick="deleteComment('${post._id}','${comment._id}')">Usuń</button>`;
                 }
@@ -147,6 +169,7 @@ function renderPosts() {
         container.appendChild(postDiv);
     });
 }
+
 
 // ====== Akcje ======
 async function deletePost(postId) {

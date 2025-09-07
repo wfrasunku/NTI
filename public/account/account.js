@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const saveMessage = document.getElementById('save-message');
     const imageInput = document.getElementById('edit-image');
     const deleteBtn = document.getElementById('delete-user-btn');
+    const backBtn = document.querySelector('.back-button');
 
     let originalUsername = null;
     let loggedInUserRole = 'user';
@@ -141,6 +142,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
     }
+
+    if (backBtn) {
+    backBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // nie przeładowuje linku
+        if (history.length > 1) {
+            history.back(); // wraca do poprzedniej strony
+        } else {
+            window.location.href = '/index.html'; // jeśli brak historii, idzie na stronę główną
+        }
+    });
+}
 
     // Tryb edycji
     if (isOwnProfile) {
