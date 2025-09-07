@@ -81,72 +81,81 @@ window.addEventListener("load", () => {
 });
 
 // ================== LOGOWANIE + SIDEBAR ==================
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
     const userInfo = document.getElementById('user-info');
     const toggleSidebarBtn = document.getElementById('toggle-sidebar');
     const sidebar = document.getElementById('sidebar');
     const userList = document.getElementById('user-list');
 
-    const user = localStorage.getItem('loggedInUser');
+    try {
+        const res = await fetch('http://localhost:3000/api/currentUser', {
+            credentials: 'include'
+        });
 
-    if (user) {
-        // Pokaz info zalogowanego u?ytkownika
-        fetch(`http://localhost:3000/api/user/${user}`)
-            .then(res => res.json())
-            .then(userData => {
-                const imgSrc = userData.profileImage || '/images/default-profile.png';
-                userInfo.innerHTML = `
-          <a href="/account/account.html" id="profile-link">
-            <img src="${imgSrc}" class="user-icon" />
-            ${userData.username}
-          </a>
-          <button id="logoutBtn">Wyloguj</button>
+        if (!res.ok) {
+            userInfo.innerHTML = `Nie jesteś zalogowany → <a href="login/login.html">Log in</a>`;
+            return;
+        }
+
+        const user = await res.json();
+
+        // Pokaz info zalogowanego użytkownika
+        const userDataRes = await fetch(`http://localhost:3000/api/user/${user.username}`, {
+            credentials: 'include'
+        });
+        const userData = await userDataRes.json();
+
+        const imgSrc = userData.profileImage || '/images/default-profile.png';
+        userInfo.innerHTML = `
+            <a href="/account/account.html" id="profile-link">
+                <img src="${imgSrc}" class="user-icon" />
+                ${userData.username}
+            </a>
+            <button id="logoutBtn">Wyloguj</button>
         `;
 
-                // Wylogowanie
-                document.getElementById('logoutBtn').addEventListener('click', () => {
-                    localStorage.removeItem('loggedInUser');
-                    localStorage.removeItem('hasSeenLoader');
-                    window.location.href = '../index.html';
-                });
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await fetch('http://localhost:3000/api/logout', {
+                method: 'POST',
+                credentials: 'include'
             });
+            window.location.reload();
+        });
 
-        // Poka? sidebar
+        // Pokaż sidebar
         toggleSidebarBtn.classList.remove('hidden');
         toggleSidebarBtn.addEventListener('click', () => {
             sidebar.classList.toggle('hidden');
         });
 
-        // Pobierz list? u?ytkownik�w
-        fetch('http://localhost:3000/api/users')
-            .then(res => res.json())
-            .then(users => {
-                const sortedUsers = users.sort((a, b) => {
-                    if (a.role === 'admin' && b.role !== 'admin') return -1;
-                    if (a.role !== 'admin' && b.role === 'admin') return 1;
-                    return a.username.localeCompare(b.username);
-                });
+        // Pobierz listę użytkowników
+        const usersRes = await fetch('http://localhost:3000/api/users', {
+            credentials: 'include'
+        });
+        const users = await usersRes.json();
 
-                sortedUsers.forEach(u => {
-                    const li = document.createElement('li');
-                    const isAdmin = u.role === 'admin';
-                    const imgSrc = u.profileImage || '/images/default-profile.png';
+        const sortedUsers = users.sort((a, b) => {
+            if (a.role === 'admin' && b.role !== 'admin') return -1;
+            if (a.role !== 'admin' && b.role === 'admin') return 1;
+            return a.username.localeCompare(b.username);
+        });
 
-                    li.innerHTML = `
-            <a href="/account/account.html?user=${u.username}" class="${isAdmin ? 'admin-user' : ''}">
-              <img src="${imgSrc}" alt="img" class="user-icon">
-              ${u.username}
-            </a>
-          `;
-                    userList.appendChild(li);
-                });
-            })
-            .catch(err => {
-                console.error('B??d ?adowania u?ytkownik�w:', err);
-                document.getElementById("preloader")?.classList.add("hidden");
-            });
-    } else {
-        // Niezalogowany
-        userInfo.innerHTML = `Nie jeste? zalogowany � <a href="login/login.html">Log in</a>`;
+        sortedUsers.forEach(u => {
+            const li = document.createElement('li');
+            const isAdmin = u.role === 'admin';
+            const imgSrc = u.profileImage || '/images/default-profile.png';
+
+            li.innerHTML = `
+                <a href="/account/account.html?user=${u.username}" class="${isAdmin ? 'admin-user' : ''}">
+                    <img src="${imgSrc}" alt="img" class="user-icon">
+                    ${u.username}
+                </a>
+            `;
+            userList.appendChild(li);
+        });
+
+    } catch (err) {
+        console.error('Błąd ładowania użytkownika:', err);
+        userInfo.innerHTML = `Nie jesteś zalogowany → <a href="login/login.html">Log in</a>`;
     }
 });

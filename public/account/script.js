@@ -1,10 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const originalUsername = localStorage.getItem('loggedInUser');
-    const urlParams = new URLSearchParams(window.location.search);
-    const viewedUsername = urlParams.get('user') || originalUsername;
-
-    const isOwnProfile = viewedUsername === originalUsername;
-
     const viewMode = document.getElementById('view-mode');
     const editMode = document.getElementById('edit-mode');
     const editBtn = document.getElementById('edit-profile-toggle');
@@ -13,31 +7,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     const imageInput = document.getElementById('edit-image');
     const deleteBtn = document.getElementById('delete-user-btn');
 
+    let originalUsername = null;
     let loggedInUserRole = 'user';
     let originalImageSrc = '';
 
-    if (!originalUsername) {
+    // Pobranie aktualnego zalogowanego użytkownika z serwera
+    try {
+        const res = await fetch('http://localhost:3000/api/currentUser', {
+            credentials: 'include'
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            originalUsername = data.username;
+            loggedInUserRole = data.role;
+        } else {
+            window.location.href = '../login/login.html';
+            return;
+        }
+    } catch (err) {
+        console.error('Błąd pobierania aktualnego użytkownika', err);
         window.location.href = '../login/login.html';
         return;
     }
 
-    // Pobieranie danych zalogowanego u?ytkownika (rola)
-    try {
-        const res = await fetch(`http://localhost:3000/api/user/${originalUsername}`);
-        const loggedUser = await res.json();
-        loggedInUserRole = loggedUser.role;
-    } catch (e) {
-        console.error("B??d pobierania danych zalogowanego u?ytkownika.");
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewedUsername = urlParams.get('user') || originalUsername;
+    const isOwnProfile = viewedUsername === originalUsername;
 
-    // Ukryj edycj?, je?li nie sw�j profil
     if (!isOwnProfile) {
         editBtn.style.display = 'none';
         editMode.classList.add('hidden');
     }
 
+    // Funkcja pobierająca dane użytkownika
     async function loadUserData(username) {
-        const response = await fetch(`http://localhost:3000/api/user/${username}`);
+        const response = await fetch(`http://localhost:3000/api/user/${username}`, {
+            credentials: 'include'
+        });
         const data = await response.json();
 
         if (!response.ok) {
@@ -48,12 +55,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('profile-username').innerText = data.username;
         document.getElementById('creation-date').innerText = new Date(data.createdAt).toLocaleDateString('pl-PL');
         document.getElementById('profile-description').innerText = data.description || 'Brak opisu';
-        document.getElementById('profile-gender').innerText = data.gender === 'female' ? 'Kobieta' : 'M??czyzna';
+        document.getElementById('profile-gender').innerText = data.gender === 'female' ? 'Kobieta' : 'Mężczyzna';
 
         const defaultImage = data.gender === 'female'
             ? '../images/default-female.png'
             : '../images/default-male.png';
-
         const imageToShow = data.profileImage?.trim() ? data.profileImage : defaultImage;
         document.getElementById('profile-image').src = imageToShow;
         originalImageSrc = imageToShow;
@@ -67,27 +73,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await loadUserData(viewedUsername);
 
-    // Przygotuj usuwanie konta
+    // Obsługa usuwania konta
     if (deleteBtn) {
         if (!isOwnProfile && loggedInUserRole === 'admin') {
-            // Admin widzi cudzy profil (nie-admina) � przycisk zawsze widoczny
-            const res = await fetch(`http://localhost:3000/api/user/${viewedUsername}`);
+            const res = await fetch(`http://localhost:3000/api/user/${viewedUsername}`, {
+                credentials: 'include'
+            });
             const targetData = await res.json();
 
             if (targetData.role !== 'admin') {
                 deleteBtn.classList.remove('hidden');
                 deleteBtn.addEventListener('click', async () => {
-                    if (confirm(`Czy na pewno chcesz usun?? konto "${viewedUsername}"?`)) {
+                    if (confirm(`Czy na pewno chcesz usunąć konto "${viewedUsername}"?`)) {
                         const delRes = await fetch(`http://localhost:3000/api/user/${viewedUsername}`, {
-                            method: 'DELETE'
+                            method: 'DELETE',
+                            credentials: 'include'
                         });
 
                         if (delRes.ok) {
-                            alert(`U?ytkownik "${viewedUsername}" zosta? usuni?ty.`);
+                            alert(`Użytkownik "${viewedUsername}" został usunięty.`);
                             window.location.href = '../index.html';
                         } else {
                             const err = await delRes.json();
-                            alert('B??d usuwania: ' + err.message);
+                            alert('Błąd usuwania: ' + err.message);
                         }
                     }
                 });
@@ -95,41 +103,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (isOwnProfile) {
-            // Przycisk widoczny dopiero po wej?ciu w edycj?
             editBtn.addEventListener('click', () => {
+                viewMode.classList.add('hidden');
+                editMode.classList.remove('hidden');
                 deleteBtn.classList.remove('hidden');
             });
 
             cancelBtn.addEventListener('click', () => {
+                editMode.classList.add('hidden');
+                viewMode.classList.remove('hidden');
+                document.getElementById('profile-image').src = originalImageSrc;
+                imageInput.value = '';
                 deleteBtn.classList.add('hidden');
             });
 
             deleteBtn.addEventListener('click', async () => {
-                const confirmed = confirm("Czy na pewno chcesz usun?? swoje konto? Tej operacji nie mo?na cofn??.");
+                const confirmed = confirm("Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.");
                 if (!confirmed) return;
 
                 try {
                     const res = await fetch(`http://localhost:3000/api/user/${originalUsername}`, {
-                        method: 'DELETE'
+                        method: 'DELETE',
+                        credentials: 'include'
                     });
 
                     if (res.ok) {
-                        alert("Twoje konto zosta?o usuni?te.");
-                        localStorage.removeItem("loggedInUser");
+                        alert("Twoje konto zostało usunięte.");
                         window.location.href = "/index.html";
                     } else {
                         const err = await res.json();
-                        alert("B??d podczas usuwania konta: " + err.message);
+                        alert("Błąd podczas usuwania konta: " + err.message);
                     }
                 } catch (error) {
-                    alert("B??d po??czenia z serwerem.");
+                    alert("Błąd połączenia z serwerem.");
                     console.error(error);
                 }
             });
         }
     }
 
-    // Tryb edycji (tylko sw�j profil)
+    // Tryb edycji
     if (isOwnProfile) {
         editBtn.addEventListener('click', () => {
             viewMode.classList.add('hidden');
@@ -171,26 +184,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch(`http://localhost:3000/api/user/${originalUsername}`, {
                     method: 'PUT',
-                    body: formData
+                    body: formData,
+                    credentials: 'include'
                 });
 
                 const result = await response.json();
 
                 if (response.ok) {
-                    localStorage.setItem('loggedInUser', result.username);
-                    saveMessage.innerText = '? Zmiany zapisane!';
+                    saveMessage.innerText = '✅ Zmiany zapisane!';
                     saveMessage.style.color = 'green';
                     await loadUserData(result.username);
                     editMode.classList.add('hidden');
                     viewMode.classList.remove('hidden');
                     deleteBtn.classList.add('hidden');
                 } else {
-                    saveMessage.innerText = '? B??d: ' + result.message;
+                    saveMessage.innerText = '❌ Błąd: ' + result.message;
                     saveMessage.style.color = 'red';
                 }
             } catch (err) {
                 console.error(err);
-                saveMessage.innerText = '? B??d po??czenia z serwerem';
+                saveMessage.innerText = '❌ Błąd połączenia z serwerem';
                 saveMessage.style.color = 'red';
             }
 

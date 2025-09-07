@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+    <link rel="stylesheet" href="forum.css">
+</head>
+<body>
+
+    <!-- Pasek użytkownika -->
+    <div id="user-info-bar">
+        <span id="user-info"></span>
+        <a href="../index.html">Powrót do strony głównej</a>
+    </div>
+
+    <!-- Sidebar użytkowników -->
+    <aside id="sidebar" class="hidden">
+        <h3>Użytkownicy</h3>
+        <ul id="user-list"></ul>
+    </aside>
+    <button id="toggle-sidebar" class="sidebar-toggle hidden">☰</button>
+
+    <div class="container">
+        <h1>Forum</h1>
+
+        <!-- Dodawanie postów (tylko zalogowani) -->
+        <div id="new-post-section" class="hidden">
+            <textarea id="post-content" placeholder="Napisz nowy post..." rows="3"></textarea><br>
+            <button id="add-post-btn">Dodaj post</button>
+        </div>
+
+        <!-- Kontener postów -->
+        <div id="posts-container"></div>
+    </div>
+
+    <script src="forum.js"></script>
+</body>
+</html>
