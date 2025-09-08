@@ -31,33 +31,49 @@ router.get('/devlogs', async (req, res) => {
 });
 
 // Dodaj devlog (tylko admin)
-router.post('/devlogs', uploadDevlogs.array('images', 10), async (req, res) => {
-  try {
-    if (!req.session.user || req.session.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Tylko administrator może dodawać devlogi' });
+// Dodaj devlog (tylko admin) z miniaturką i zdjęciami
+router.post(
+  '/devlogs',
+  uploadDevlogs.fields([
+    { name: 'thumbnail', maxCount: 1 },
+    { name: 'images', maxCount: 10 }
+  ]),
+  async (req, res) => {
+    try {
+      if (!req.session.user || req.session.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Tylko administrator może dodawać devlogi' });
+      }
+
+      const author = await User.findOne({ username: req.session.user.username });
+
+      const thumbnailPath = req.files['thumbnail']
+        ? '/uploads/devlogs/' + req.files['thumbnail'][0].filename
+        : undefined;
+
+      const imagesPaths = req.files['images']
+        ? req.files['images'].map(f => '/uploads/devlogs/' + f.filename)
+        : [];
+
+      const devlog = new Devlog({
+        title: req.body.title,
+        content: req.body.content,
+        thumbnail: thumbnailPath,
+        images: imagesPaths,
+        author: author._id
+      });
+
+      await devlog.save();
+
+      const fullDevlog = await Devlog.findById(devlog._id)
+        .populate('comments.author', 'username _id'); // autor devloga niepotrzebny na froncie
+
+      res.status(201).json(fullDevlog);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Błąd tworzenia devloga' });
     }
-
-    const author = await User.findOne({ username: req.session.user.username });
-    const devlogImage = req.files ? req.files.map(f => '/uploads/devlogs/' + f.filename) : [];
-
-    const devlog = new Devlog({
-      title: req.body.title,
-      content: req.body.content,
-      images: devlogImage,
-      author: author._id
-    });
-
-    await devlog.save();
-    const fullDevlog = await Devlog.findById(devlog._id)
-      .populate('author', 'username _id')
-      .populate('comments.author', 'username _id');
-
-    res.status(201).json(fullDevlog);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Błąd tworzenia devloga' });
   }
-});
+);
 
 // Usuń devlog (tylko admin)
 router.delete('/devlogs/:id', async (req, res) => {

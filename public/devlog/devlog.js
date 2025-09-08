@@ -15,14 +15,14 @@ async function initDevlog() {
     renderUserBar();
     renderDevlogs();
 
-    // 🔒 widoczność sekcji "Dodaj devlog"
+    // Widoczność sekcji "Dodaj devlog"
     const newSection = document.getElementById('new-devlog-section');
     if (newSection) {
       if (currentUser && currentUser.role === 'admin') {
         newSection.classList.remove('hidden');
         document.getElementById('add-devlog-btn').addEventListener('click', addDevlog);
       } else {
-        newSection.classList.add('hidden'); // ukryj dla nie-adminów
+        newSection.classList.add('hidden');
       }
     }
   } catch (err) {
@@ -63,60 +63,46 @@ function renderDevlogs() {
   devlogs.forEach(log => {
     const div = document.createElement('div');
     div.className = 'devlog';
+    
+    // Miniaturka + tytuł i data
+    div.innerHTML = `
+      <div class="devlog-header">
+        ${log.thumbnail ? `<img class="thumbnail" src="${log.thumbnail}" alt="miniaturka">` : ''}
+        <div class="title-date">
+          <h3>${log.title}</h3>
+          <div class="meta">${new Date(log.createdAt).toLocaleString()}</div>
+        </div>
+      </div>
+    `;
 
-    // Meta
-    const meta = document.createElement('div');
-    meta.innerHTML = `<b>${log.author?.username || 'admin'}</b> • ${new Date(log.createdAt).toLocaleString()}`;
-    div.appendChild(meta);
-
-    // Tytuł
-    const title = document.createElement('h3');
-    title.textContent = log.title;
-    div.appendChild(title);
-
-    // Treść
-    const content = document.createElement('p');
-    content.textContent = log.content;
-    div.appendChild(content);
-
-    // Zdjęcia
-    if (log.images && log.images.length) {
-      const imgsWrap = document.createElement('div');
-      log.images.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.style.width = '120px';
-        img.style.margin = '6px';
-        imgsWrap.appendChild(img);
-      });
-      div.appendChild(imgsWrap);
-    }
-
-    // Admin akcje
-    if (currentUser?.role === 'admin') {
-      const delBtn = document.createElement('button');
-      delBtn.textContent = 'Usuń devlog';
-      delBtn.onclick = () => deleteDevlog(log._id);
-      div.appendChild(delBtn);
-    }
-
-    // Komentarze
-    if (Array.isArray(log.comments)) {
-      log.comments.forEach(c => {
-        const com = document.createElement('div');
-        com.className = 'comment';
-        com.innerHTML = `<b>${c.author?.username || '?'}</b>: ${c.content}`;
-        div.appendChild(com);
-      });
-    }
-
-    if (currentUser) {
-      div.innerHTML += `<input id="comment-input-${log._id}" placeholder="Komentarz"> 
-        <button onclick="addComment('${log._id}')">Dodaj</button>`;
-    }
+    div.addEventListener('click', () => openDevlogModal(log));
 
     container.appendChild(div);
   });
+}
+
+// Modal devloga
+function openDevlogModal(log) {
+  // Tworzymy overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'devlog-modal-overlay';
+
+  const modal = document.createElement('div');
+  modal.className = 'devlog-modal';
+  
+  modal.innerHTML = `
+    <button class="close-modal">✖</button>
+    <h2>${log.title}</h2>
+    <div class="meta">${new Date(log.createdAt).toLocaleString()}</div>
+    <p>${log.content}</p>
+    ${log.images && log.images.length ? `<div class="devlog-images">${log.images.map(url => `<img src="${url}">`).join('')}</div>` : ''}
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  overlay.querySelector('.close-modal').addEventListener('click', () => overlay.remove());
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 }
 
 // Dodawanie devloga (admin)
@@ -133,7 +119,10 @@ async function addDevlog() {
   const formData = new FormData();
   formData.append('title', title);
   formData.append('content', content);
-  for (let i = 0; i < files.length; i++) formData.append('images', files[i]);
+
+  // Pliki: pierwszy jako miniaturka, reszta jako images
+  if (files.length) formData.append('thumbnail', files[0]);
+  for (let i = 1; i < files.length; i++) formData.append('images', files[i]);
 
   const res = await fetch(`${API}/devlogs`, {
     method: 'POST',
@@ -151,29 +140,6 @@ async function addDevlog() {
     const err = await res.json();
     alert(err.message || 'Błąd');
   }
-}
-
-// Usuwanie devloga
-async function deleteDevlog(id) {
-  await fetch(`${API}/devlogs/${id}`, { method: 'DELETE', credentials: 'include' });
-  devlogs = devlogs.filter(d => d._id !== id);
-  renderDevlogs();
-}
-
-// Dodawanie komentarza
-async function addComment(devlogId) {
-  const input = document.getElementById(`comment-input-${devlogId}`);
-  if (!input || !input.value.trim()) return;
-
-  await fetch(`${API}/devlogs/${devlogId}/comments`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ content: input.value.trim() }),
-    credentials: 'include'
-  });
-
-  devlogs = await (await fetch(`${API}/devlogs`, { credentials: 'include' })).json();
-  renderDevlogs();
 }
 
 initDevlog();
