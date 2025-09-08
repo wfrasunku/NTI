@@ -112,7 +112,10 @@ function renderPosts() {
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
 
-        // Nazwa autora jako link do jego profilu
+        // ===== Nagłówek posta =====
+        const header = document.createElement('div');
+        header.style.marginBottom = "8px";
+
         const authorLink = document.createElement('a');
         authorLink.href = `/account/account.html?user=${post.author.username}`;
         authorLink.textContent = post.author.username;
@@ -120,43 +123,39 @@ function renderPosts() {
         authorLink.style.fontWeight = 'bold';
         authorLink.style.marginRight = '5px';
 
-        const contentSpan = document.createElement('span');
-        contentSpan.textContent = `: ${post.content}`;
+        const typeSpan = document.createElement('span');
+        typeSpan.textContent = `[${post.type}]`;
+        typeSpan.style.color = "#555";
+        typeSpan.style.marginLeft = "5px";
 
-        const likesSpan = document.createElement('div');
-        likesSpan.textContent = `Likes: ${post.likes || 0} | Dislikes: ${post.dislikes || 0}`;
+        const dateSpan = document.createElement('span');
+        dateSpan.textContent = ` • ${new Date(post.createdAt).toLocaleString()}`;
+        dateSpan.style.color = "#888";
+        dateSpan.style.fontSize = "12px";
+        dateSpan.style.marginLeft = "5px";
 
-        postDiv.appendChild(authorLink);
+        header.appendChild(authorLink);
+        header.appendChild(typeSpan);
+        header.appendChild(dateSpan);
+
+        postDiv.appendChild(header);
+
+        // ===== Treść posta =====
+        const contentSpan = document.createElement('div');
+        contentSpan.textContent = post.content;
+        contentSpan.style.marginBottom = "10px";
         postDiv.appendChild(contentSpan);
-        postDiv.appendChild(likesSpan);
 
-        const actions = document.createElement('div');
-        actions.className = 'post-actions';
-
-        if (currentUser) {
-            actions.innerHTML += `<button onclick="likePost('${post._id}')">👍</button>`;
-            actions.innerHTML += `<button onclick="dislikePost('${post._id}')">👎</button>`;
-            actions.innerHTML += `<input id="comment-input-${post._id}" placeholder="Komentarz"> <button onclick="addComment('${post._id}')">Dodaj</button>`;
-
-            if (currentUser._id === post.author._id) {
-                actions.innerHTML += `<button onclick="editPost('${post._id}')">Edytuj post</button>`;
-            }
-            if (currentUser.role === 'admin' || currentUser._id === post.author._id) {
-                actions.innerHTML += `<button onclick="deletePost('${post._id}')">Usuń post</button>`;
-            }
-        }
-
-        postDiv.appendChild(actions);
-
-        // Zdjęcia
+        // ===== Zdjęcia =====
         if (post.images && post.images.length > 0) {
             const imagesDiv = document.createElement('div');
             imagesDiv.className = 'post-images';
             post.images.forEach(imgPath => {
                 const img = document.createElement('img');
                 img.src = imgPath;
-                img.style.width = '100px';
+                img.style.width = '120px';
                 img.style.margin = '5px';
+                img.style.borderRadius = '6px';
                 img.style.cursor = 'pointer';
 
                 // powiększenie po kliknięciu
@@ -180,7 +179,6 @@ function renderPosts() {
                     modal.appendChild(modalImg);
 
                     modal.addEventListener('click', () => document.body.removeChild(modal));
-
                     document.body.appendChild(modal);
                 });
 
@@ -189,7 +187,31 @@ function renderPosts() {
             postDiv.appendChild(imagesDiv);
         }
 
-        // Komentarze
+        // ===== Likes / Dislikes =====
+        const likesSpan = document.createElement('div');
+        likesSpan.textContent = `Likes: ${post.likes || 0} | Dislikes: ${post.dislikes || 0}`;
+        likesSpan.style.marginTop = "10px";
+        postDiv.appendChild(likesSpan);
+
+        const actions = document.createElement('div');
+        actions.className = 'post-actions';
+
+        if (currentUser) {
+            actions.innerHTML += `<button onclick="likePost('${post._id}')">👍</button>`;
+            actions.innerHTML += `<button onclick="dislikePost('${post._id}')">👎</button>`;
+            actions.innerHTML += `<input id="comment-input-${post._id}" placeholder="Komentarz"> <button onclick="addComment('${post._id}')">Dodaj</button>`;
+
+            if (currentUser._id === post.author._id) {
+                actions.innerHTML += `<button onclick="editPost('${post._id}')">Edytuj post</button>`;
+            }
+            if (currentUser.role === 'admin' || currentUser._id === post.author._id) {
+                actions.innerHTML += `<button onclick="deletePost('${post._id}')">Usuń post</button>`;
+            }
+        }
+
+        postDiv.appendChild(actions);
+
+        // ===== Komentarze =====
         post.comments.forEach(comment => {
             const commentDiv = document.createElement('div');
             commentDiv.className = 'comment';
@@ -221,6 +243,7 @@ function renderPosts() {
         container.appendChild(postDiv);
     });
 }
+
 
 // ====== Usuwanie postu ======
 async function deletePost(postId) {
