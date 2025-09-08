@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+/* Pasek użytkownika */
+#user-info-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#user-info-bar a {
+    color: #00bfff;
+    text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Kontener główny */
+.container {
+    max-width: 800px;
+    margin: 80px auto 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Formularz dodawania */
+#new-devlog-section input[type="text"],
+#new-devlog-section textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 12px 0;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+    resize: vertical;
+}
+
+#new-devlog-section button {
+    margin-top: 8px;
+}
+
+/* Guziki */
+button {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #2980b9;
+    color: white;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #3498db;
+}
+
+/* Devlog */
+.devlog {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    background-color: #fafafa;
+}
+
+.devlog h3 {
+    margin-top: 8px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.devlog p {
+    margin: 6px 0;
+    line-height: 1.4;
+}
+
+/* Meta */
+.devlog .meta {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Obrazy */
+.devlog img {
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* Komentarze */
+.comment {
+    margin-top: 8px;
+    margin-left: 15px;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border-left: 3px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}

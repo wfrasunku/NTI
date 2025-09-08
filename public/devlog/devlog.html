@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Devlog</title>
+  <link rel="stylesheet" href="devlog.css">
+</head>
+
+<body>
+  <div id="user-info-bar">
+    <span id="user-info"></span>
+    <a href="../index.html">Powrót do strony głównej</a>
+  </div>
+
+  <div class="container">
+    <h1>Devlog</h1>
+
+    <!-- Dodawanie devloga (tylko admin) -->
+    <div id="new-devlog-section" class="hidden">
+      <label for="devlog-title">Tytuł:</label>
+      <input type="text" id="devlog-title" placeholder="Podaj tytuł"><br>
+
+      <textarea id="devlog-content" placeholder="Napisz treść devloga..." rows="3"></textarea><br>
+
+      <label for="devlog-images">Dodaj zdjęcia:</label>
+      <input type="file" id="devlog-images" multiple accept="image/*"><br>
+
+      <button id="add-devlog-btn">Dodaj devlog</button>
+    </div>
+
+    <div id="devlogs-container"></div>
+  </div>
+
+  <script src="devlog.js"></script>
+</body>
+
+</html>

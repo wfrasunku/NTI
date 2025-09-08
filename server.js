@@ -7,6 +7,7 @@ const multer = require('multer');
 
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
+const devlogRoutes = require('./routes/devlogs')
 
 const app = express();
 
@@ -29,6 +30,7 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname === 'profileImage') cb(null, 'public/uploads/profile/');
         else if (file.fieldname === 'images') cb(null, 'public/uploads/posts/');
+        else if (file.fieldname === 'devlogImage') cb(null, 'public/uploads/devlogs/');
         else cb(null, 'public/uploads/');
     },
     filename: (req, file, cb) => {
@@ -48,6 +50,7 @@ mongoose.connect('mongodb://localhost:27017/loginApp', {
 // ================== ROUTES ==================
 app.use('/api', userRoutes);
 app.use('/api', postRoutes);
+app.use('/api', devlogRoutes);
 
 // ================== URUCHOMIENIE ==================
 app.listen(3000, () => console.log('🚀 Serwer działa na http://localhost:3000'));
