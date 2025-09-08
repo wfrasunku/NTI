@@ -73,6 +73,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const postsContainer = document.getElementById('user-posts');
             postsContainer.innerHTML = '';
 
+            if (userPosts.length === 0) {
+                const noPostsMsg = document.createElement('p');
+                noPostsMsg.textContent = "Użytkownik nie umieścił jeszcze żadnego posta";
+                noPostsMsg.style.fontStyle = 'italic';
+                noPostsMsg.style.color = '#555';
+                postsContainer.appendChild(noPostsMsg);
+                return;
+            }
+
             userPosts.forEach(post => {
                 const postDiv = document.createElement('div');
                 postDiv.className = 'user-post';

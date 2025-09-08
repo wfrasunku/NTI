@@ -224,13 +224,6 @@ function renderPosts() {
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
 
-        // Tytuł
-        if (post.title) {
-            const titleEl = document.createElement('h3');
-            titleEl.textContent = post.title;
-            postDiv.appendChild(titleEl);
-        }
-
         // Meta
         const meta = document.createElement('div');
         meta.className = 'post-meta';
@@ -253,6 +246,13 @@ function renderPosts() {
         meta.appendChild(dateSpan);
 
         postDiv.appendChild(meta);
+
+        // Tytuł
+        if (post.title) {
+            const titleEl = document.createElement('h3');
+            titleEl.textContent = post.title;
+            postDiv.appendChild(titleEl);
+        }
 
         // Treść
         const contentDiv = document.createElement('div');
