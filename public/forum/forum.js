@@ -75,13 +75,15 @@ async function renderUserList() {
 
 // ====== Dodawanie postu ======
 async function addPost() {
+    const title = document.getElementById('post-title').value.trim();
     const content = document.getElementById('post-content').value.trim();
     const type = document.getElementById('post-type').value;
     const files = document.getElementById('post-images').files;
 
-    if (!content) return;
+    if (!title || !content) return;
 
     const formData = new FormData();
+    formData.append('title', title);
     formData.append('content', content);
     formData.append('type', type);
 
@@ -96,12 +98,14 @@ async function addPost() {
         });
         if (res.ok) {
             posts = await (await fetch(`${API}/posts`)).json();
+            document.getElementById('post-title').value = '';
             document.getElementById('post-content').value = '';
             document.getElementById('post-images').value = '';
             renderPosts();
         }
     } catch (err) { console.error(err); }
 }
+
 
 // ====== Renderowanie postów ======
 function renderPosts() {
@@ -115,6 +119,11 @@ function renderPosts() {
         // ===== Nagłówek posta =====
         const header = document.createElement('div');
         header.style.marginBottom = "8px";
+
+        const titleEl = document.createElement('h3');
+        titleEl.textContent = post.title;
+        titleEl.style.margin = "0 0 5px 0";
+        postDiv.appendChild(titleEl);
 
         const authorLink = document.createElement('a');
         authorLink.href = `/account/account.html?user=${post.author.username}`;

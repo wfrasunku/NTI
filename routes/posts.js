@@ -33,7 +33,7 @@ router.get('/posts', async (req, res) => {
 // Dodanie postu
 router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {
     try {
-        const { content, type } = req.body;
+        const { title, content, type } = req.body;
 
         if (!req.session.user) return res.status(401).json({ message: 'Nie zalogowany' });
 
@@ -43,6 +43,7 @@ router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {
         const images = req.files ? req.files.map(f => '/uploads/posts/' + f.filename) : [];
 
         const post = new Post({
+            title,
             content,
             type,
             author: author._id,
@@ -60,20 +61,6 @@ router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Błąd tworzenia posta' });
     }
-});
-
-// Edycja postu
-router.put('/posts/:id', async (req, res) => {
-    const post = await Post.findById(req.params.id).populate('author');
-    if (!post) return res.status(404).json({ message: 'Post nie istnieje' });
-
-    if (req.session.user.username !== post.author.username && req.session.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Brak uprawnień' });
-    }
-
-    post.content = req.body.content;
-    await post.save();
-    res.json(post);
 });
 
 // Usuwanie postu
@@ -106,23 +93,6 @@ router.post('/posts/:id/comments', async (req, res) => {
     res.json(fullPost);
 });
 
-// Edycja komentarza
-router.put('/posts/:postId/comments/:commentId', async (req, res) => {
-    const post = await Post.findById(req.params.postId).populate('comments.author');
-    if (!post) return res.status(404).json({ message: 'Post nie istnieje' });
-
-    const comment = post.comments.id(req.params.commentId);
-    if (!comment) return res.status(404).json({ message: 'Komentarz nie istnieje' });
-
-    if (req.session.user.username !== comment.author.username && req.session.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Brak uprawnień' });
-    }
-
-    comment.content = req.body.content;
-    await post.save();
-    res.json(post);
-});
-
 // Usuwanie komentarza
 router.delete('/posts/:postId/comments/:commentId', async (req, res) => {
     const post = await Post.findById(req.params.postId).populate('comments.author');
@@ -140,7 +110,7 @@ router.delete('/posts/:postId/comments/:commentId', async (req, res) => {
     res.json(post);
 });
 
-// Lubię/Nie lubię post
+// Like post
 router.post('/posts/:id/like', async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post nie istnieje' });
@@ -150,6 +120,7 @@ router.post('/posts/:id/like', async (req, res) => {
     res.json(post);
 });
 
+// Dislike post
 router.post('/posts/:id/dislike', async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post nie istnieje' });
