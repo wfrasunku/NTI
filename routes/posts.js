@@ -20,15 +20,25 @@ const uploadPosts = multer({ storage: postStorage });
 // Pobranie wszystkich postów
 router.get('/posts', async (req, res) => {
     try {
-        const posts = await Post.find()
+        const authorUsername = req.query.author;
+        let filter = {};
+        if (authorUsername) {
+            const user = await User.findOne({ username: authorUsername });
+            if (!user) return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
+            filter.author = user._id;
+        }
+
+        const posts = await Post.find(filter)
             .populate('author', 'username _id')
             .populate('comments.author', 'username _id')
             .sort({ createdAt: -1 });
+
         res.json(posts);
     } catch (err) {
         res.status(500).json({ message: 'Błąd serwera' });
     }
 });
+
 
 // Dodanie postu
 router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {

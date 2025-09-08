@@ -124,6 +124,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadUserData(viewedUsername);
     await loadUserPosts(viewedUsername);
 
+    document.getElementById('user-posts-header').innerText = isOwnProfile ? 'Moje posty' : 'Posty użytkownika';
+
     // ===== Galeria zdjęć =====
     function openImageGallery(images, startIndex = 0) {
         const modal = document.createElement('div');
