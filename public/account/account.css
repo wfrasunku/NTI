@@ -209,6 +209,13 @@ form#edit-mode textarea {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.user-post .post-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0 10px 0;
+    color: #222;
+}
+
 .user-post:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);

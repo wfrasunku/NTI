@@ -84,6 +84,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 <span>[${post.type}] • ${new Date(post.createdAt).toLocaleString()}</span>`;
                 postDiv.appendChild(header);
 
+                // Tytuł posta
+                if (post.title) {
+                    const titleEl = document.createElement('h4');
+                    titleEl.className = 'post-title';
+                    titleEl.textContent = post.title;
+                    postDiv.appendChild(titleEl);
+                }
+
                 // Treść
                 const content = document.createElement('div');
                 content.className = 'post-content';
@@ -120,6 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error(err);
         }
     }
+
 
     await loadUserData(viewedUsername);
     await loadUserPosts(viewedUsername);
