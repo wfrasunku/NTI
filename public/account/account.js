@@ -64,7 +64,110 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    async function loadUserPosts(username) {
+        try {
+            const res = await fetch(`http://localhost:3000/api/posts?author=${username}`, { credentials: 'include' });
+            if (!res.ok) return;
+
+            const userPosts = await res.json();
+            const postsContainer = document.getElementById('user-posts');
+            postsContainer.innerHTML = '';
+
+            userPosts.forEach(post => {
+                const postDiv = document.createElement('div');
+                postDiv.className = 'user-post';
+
+                // Nagłówek posta
+                const header = document.createElement('div');
+                header.className = 'post-header';
+                header.innerHTML = `<a href="/account/account.html?user=${post.author.username}">${post.author.username}</a>
+                                <span>[${post.type}] • ${new Date(post.createdAt).toLocaleString()}</span>`;
+                postDiv.appendChild(header);
+
+                // Treść
+                const content = document.createElement('div');
+                content.className = 'post-content';
+                content.textContent = post.content;
+                postDiv.appendChild(content);
+
+                // Obrazy
+                if (post.images && post.images.length > 0) {
+                    const imagesDiv = document.createElement('div');
+                    imagesDiv.className = 'post-images';
+
+                    post.images.forEach((imgPath, index) => {
+                        const img = document.createElement('img');
+                        img.src = imgPath;
+                        img.style.width = '100px';
+                        img.style.margin = '5px';
+                        img.style.borderRadius = '5px';
+                        img.style.cursor = 'pointer';
+
+                        // Otwórz galerię po kliknięciu
+                        img.addEventListener('click', () => {
+                            openImageGallery(post.images, index);
+                        });
+
+                        imagesDiv.appendChild(img);
+                    });
+
+                    postDiv.appendChild(imagesDiv);
+                }
+
+                postsContainer.appendChild(postDiv);
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     await loadUserData(viewedUsername);
+    await loadUserPosts(viewedUsername);
+
+    // ===== Galeria zdjęć =====
+    function openImageGallery(images, startIndex = 0) {
+        const modal = document.createElement('div');
+        modal.className = 'img-modal';
+        Object.assign(modal.style, {
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 20000
+        });
+
+        let idx = startIndex;
+        const imgEl = document.createElement('img');
+        imgEl.src = images[idx];
+        imgEl.style.maxWidth = '90%';
+        imgEl.style.maxHeight = '90%';
+        imgEl.style.borderRadius = '8px';
+        modal.appendChild(imgEl);
+
+        // Poprzednie
+        const prev = document.createElement('button');
+        prev.textContent = '<';
+        Object.assign(prev.style, { position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', fontSize: '24px', background: 'transparent', color: 'white', border: 'none', cursor: 'pointer' });
+        prev.addEventListener('click', e => {
+            e.stopPropagation();
+            idx = (idx - 1 + images.length) % images.length;
+            imgEl.src = images[idx];
+        });
+        modal.appendChild(prev);
+
+        // Następne
+        const next = document.createElement('button');
+        next.textContent = '>';
+        Object.assign(next.style, { position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', fontSize: '24px', background: 'transparent', color: 'white', border: 'none', cursor: 'pointer' });
+        next.addEventListener('click', e => {
+            e.stopPropagation();
+            idx = (idx + 1) % images.length;
+            imgEl.src = images[idx];
+        });
+        modal.appendChild(next);
+
+        modal.addEventListener('click', () => document.body.removeChild(modal));
+        document.body.appendChild(modal);
+    }
+
 
     // Obsługa powrotu
     if (backBtn) {

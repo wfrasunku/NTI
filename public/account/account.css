@@ -8,17 +8,22 @@ body {
 .container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 40px;
 }
 
+/* ===== Profil użytkownika ===== */
 .profile-container {
     background: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 400px;
+    width: 300px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
 }
 
 .profile-container img {
@@ -48,6 +53,7 @@ body {
     background-color: #3498db;
 }
 
+/* ===== Edycja profilu ===== */
 textarea {
     width: 100%;
     resize: none;
@@ -128,7 +134,7 @@ form#edit-mode textarea {
 }
 
 #edit-image::before {
-    content: '?? Wybierz zdj?cie';
+    content: '📁 Wybierz zdjęcie';
     display: inline-block;
     background: #e0e0e0;
     border: 1px solid #999;
@@ -174,16 +180,103 @@ form#edit-mode textarea {
     background-color: #c0392b;
 }
 
-button.danger {
-    background-color: #e74c3c;
-    color: white;
-    padding: 8px 16px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* ===== Posty użytkownika ===== */
+#user-posts-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-button.danger:hover {
-    background-color: #c0392b;
+#user-posts-container h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.user-post {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.user-post .post-header {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.user-post .post-header a {
+    font-weight: bold;
+    color: #2980b9;
+    margin-right: 6px;
+    text-decoration: none;
+}
+
+.user-post .post-header a:hover {
+    text-decoration: underline;
+}
+
+.user-post .post-header span {
+    margin-left: 5px;
+    color: #888;
+}
+
+.user-post .post-content {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.user-post .post-images img {
+    width: 100px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.user-post .post-images img:hover {
+    transform: scale(1.05);
+}
+
+.user-post .post-likes {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.user-post .post-actions button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s ease;
+}
+
+.user-post .post-actions button:hover {
+    background-color: #2980b9;
+}
+
+.user-post .comment {
+    margin-left: 10px;
+    margin-top: 5px;
+    padding-left: 5px;
+    border-left: 2px solid #eee;
+    font-size: 13px;
+    color: #555;
 }
