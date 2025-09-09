@@ -52,7 +52,7 @@ document.querySelectorAll(".hover-object").forEach(obj => {
     });
 });
 
-// ================== PRELOADER (tylko raz) ==================
+// ================== PRELOADER ==================
 window.addEventListener("load", () => {
     const preloader = document.getElementById("preloader");
 
@@ -79,3 +79,26 @@ window.addEventListener("load", () => {
         }
     }, 50);
 });
+
+// ================== LOGIN/PROFILE SWITCH ==================
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch('/api/currentUser', { credentials: 'include' });
+    if (res.ok) {
+      const currentUser = await res.json();
+
+      // Znajdź obiekt Drawer (Login)
+      const loginObj = document.querySelector(
+        ".hover-object[data-message='Login']"
+      );
+
+      if (loginObj) {
+        loginObj.dataset.message = "Profile";
+        loginObj.dataset.link = `/account/account.html?user=${currentUser.username}`;
+      }
+    }
+  } catch (err) {
+    console.error("Błąd sprawdzania użytkownika:", err);
+  }
+});
+
