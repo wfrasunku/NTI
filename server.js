@@ -9,6 +9,10 @@ const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
 const devlogRoutes = require('./routes/devlogs')
 
+const fs = require('fs');
+const faqPath = path.join(__dirname, 'public/data/faq.json');
+
+
 const app = express();
 
 // ================== KONFIGURACJA ==================
@@ -54,3 +58,55 @@ app.use('/api', devlogRoutes);
 
 // ================== URUCHOMIENIE ==================
 app.listen(3000, () => console.log('🚀 Serwer działa na http://localhost:3000'));
+
+
+// ======== ŚCIEŻKA DO PLIKU FAQ.JSON ========
+const faqFilePath = path.join(__dirname, "public", "faq", "faq.json");
+
+// ======== POBIERANIE PYTAŃ ========
+app.get("/api/faq", (req, res) => {
+    fs.readFile(faqFilePath, "utf8", (err, data) => {
+        if (err) {
+            console.error("Błąd wczytywania FAQ:", err);
+            return res.status(500).json({ error: "Nie udało się wczytać FAQ." });
+        }
+
+        try {
+            const faqs = JSON.parse(data);
+            res.json(faqs);
+        } catch (e) {
+            res.status(500).json({ error: "Błąd parsowania JSON." });
+        }
+    });
+});
+
+// ======== ZAPIS PYTAŃ (DODAWANIE / EDYCJA) ========
+app.post("/api/faq", (req, res) => {
+    const { question, answer, index } = req.body;
+
+    if (!question || !answer) {
+        return res.status(400).json({ error: "Brakuje pytania lub odpowiedzi." });
+    }
+
+    fs.readFile(faqFilePath, "utf8", (err, data) => {
+        if (err) return res.status(500).json({ error: "Nie można wczytać pliku FAQ." });
+
+        let faqs;
+        try {
+            faqs = JSON.parse(data);
+        } catch (e) {
+            faqs = [];
+        }
+
+        if (typeof index === "number" && faqs[index]) {
+            faqs[index] = { question, answer };
+        } else {
+            faqs.push({ question, answer });
+        }
+
+        fs.writeFile(faqFilePath, JSON.stringify(faqs, null, 2), (err) => {
+            if (err) return res.status(500).json({ error: "Nie udało się zapisać FAQ." });
+            res.json({ message: "FAQ zapisane." });
+        });
+    });
+});
