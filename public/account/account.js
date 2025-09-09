@@ -104,7 +104,38 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Treść
                 const content = document.createElement('div');
                 content.className = 'post-content';
-                content.textContent = post.content;
+
+                // Maksymalna liczba znaków, np. 200
+                const maxLength = 200;
+
+                if (post.content.length > maxLength) {
+                    const shortText = post.content.substring(0, maxLength) + "...";
+                    const fullText = post.content;
+
+                    content.textContent = shortText;
+
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.textContent = "Czytaj dalej";
+                    toggleBtn.style.border = "none";
+                    toggleBtn.style.background = "none";
+                    toggleBtn.style.color = "#2980b9";
+                    toggleBtn.style.cursor = "pointer";
+                    toggleBtn.style.fontSize = "14px";
+                    toggleBtn.style.marginLeft = "5px";
+
+                    let expanded = false;
+                    toggleBtn.addEventListener('click', () => {
+                        expanded = !expanded;
+                        content.textContent = expanded ? fullText : shortText;
+                        toggleBtn.textContent = expanded ? "Pokaż mniej" : "Czytaj dalej";
+                        content.appendChild(toggleBtn);
+                    });
+
+                    content.appendChild(toggleBtn);
+                } else {
+                    content.textContent = post.content;
+                }
+
                 postDiv.appendChild(content);
 
                 // Obrazy
