@@ -388,19 +388,6 @@ async function deletePost(postId) {
     renderPosts();
 }
 
-async function editPost(postId) {
-    const newContent = prompt("Edytuj post:");
-    if (!newContent) return;
-    await fetch(`${API}/posts/${postId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: newContent }),
-        credentials: 'include'
-    });
-    posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
-    renderPosts();
-}
-
 async function addComment(postId) {
     const contentEl = document.getElementById(`comment-input-${postId}`);
     if (!contentEl) return;
@@ -410,19 +397,6 @@ async function addComment(postId) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content }),
-        credentials: 'include'
-    });
-    posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
-    renderPosts();
-}
-
-async function editComment(postId, commentId) {
-    const newContent = prompt("Edytuj komentarz:");
-    if (!newContent) return;
-    await fetch(`${API}/posts/${postId}/comments/${commentId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: newContent }),
         credentials: 'include'
     });
     posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
