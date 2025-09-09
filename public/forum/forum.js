@@ -22,16 +22,18 @@ async function initForum() {
         renderPosts();
 
         if (currentUser) {
-            document.getElementById('new-post-section').classList.remove('hidden');
-            document.getElementById('add-post-btn').addEventListener('click', addPost);
+            const addWrapper = document.getElementById('add-post-wrapper');
+            addWrapper.classList.remove('hidden');
 
-            const toggleBtn = document.getElementById('toggle-sidebar');
-            if (toggleBtn) {
-                toggleBtn.classList.remove('hidden');
-                toggleBtn.addEventListener('click', () => {
-                    document.getElementById('sidebar').classList.toggle('hidden');
-                });
-            }
+            const openBtn = document.getElementById('open-post-modal');
+            const modal = document.getElementById('post-modal');
+            const closeBtn = document.getElementById('close-post-modal');
+
+            openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+            closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
+
+            document.getElementById('add-post-btn').addEventListener('click', addPost);
         }
 
     } catch (err) {
@@ -39,6 +41,7 @@ async function initForum() {
         alert("Nie można połączyć się z serwerem.");
     }
 }
+
 
 // ====== Filtry ======
 function setupFilterListeners() {
@@ -157,6 +160,10 @@ async function addPost() {
             document.getElementById('post-content').value = '';
             document.getElementById('post-images').value = '';
             renderPosts();
+            // Zamknij modal po dodaniu posta
+            const modal = document.getElementById('new-post-modal');
+            if (modal) modal.classList.add('hidden');
+
         } else {
             const err = await res.json();
             alert('Błąd tworzenia posta: ' + (err.message || res.statusText));
@@ -260,6 +267,25 @@ function renderPosts() {
         contentDiv.className = 'post-content';
         postDiv.appendChild(contentDiv);
 
+        // Przycisk "czytaj dalej / schowaj"
+        if (post.content.length > 200) { // tylko dla dłuższych postów
+            const toggleBtn = document.createElement('button');
+            toggleBtn.textContent = 'Czytaj dalej';
+            toggleBtn.className = 'toggle-content-btn';
+
+            toggleBtn.addEventListener('click', () => {
+                contentDiv.classList.toggle('expanded');
+                if (contentDiv.classList.contains('expanded')) {
+                    toggleBtn.textContent = 'Schowaj';
+                } else {
+                    toggleBtn.textContent = 'Czytaj dalej';
+                }
+            });
+
+            postDiv.appendChild(toggleBtn);
+        }
+
+
         // Zdjęcia
         if (post.images && post.images.length) {
             const imgsWrap = document.createElement('div');
@@ -305,7 +331,7 @@ function renderPosts() {
             post.comments.forEach(comment => {
                 const c = document.createElement('div');
                 c.className = 'comment';
-                c.innerHTML = `<b><a href="/account/account.html?user=${encodeURIComponent(comment.author?.username||'')}" style="font-weight:bold">${comment.author?.username||'?'}</a>:</b> ${comment.content}`;
+                c.innerHTML = `<b><a href="/account/account.html?user=${encodeURIComponent(comment.author?.username || '')}" style="font-weight:bold">${comment.author?.username || '?'}</a>:</b> ${comment.content}`;
                 if (currentUser) {
                     if (currentUser._id === comment.author?._id) {
                         c.innerHTML += ` <button onclick="editComment('${post._id}','${comment._id}')">Edytuj</button>`;

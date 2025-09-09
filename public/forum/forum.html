@@ -25,24 +25,34 @@
         <h1>Forum</h1>
 
         <!-- Dodawanie postów (tylko zalogowani) -->
-        <div id="new-post-section" class="hidden">
-            <label for="post-title">Tytuł posta:</label>
-            <input type="text" id="post-title" placeholder="Podaj tytuł posta">
+        <div id="add-post-wrapper" class="hidden">
+            <button id="open-post-modal">Dodaj post</button>
+        </div>
 
-            <label for="post-type">Typ posta:</label>
-            <select id="post-type">
-                <option value="Asking for help">Asking for help</option>
-                <option value="Feature Idea">Feature Idea</option>
-                <option value="Bug report">Bug report</option>
-                <option value="Just talking">Just talking</option>
-            </select><br>
+        <!-- Modal dodawania posta -->
+        <div id="post-modal" class="hidden">
+            <div class="modal-content">
+                <span id="close-post-modal">&times;</span>
+                <h2>Nowy post</h2>
 
-            <textarea id="post-content" placeholder="Napisz nowy post..." rows="3"></textarea><br>
+                <label for="post-title">Tytuł posta:</label>
+                <input type="text" id="post-title" placeholder="Podaj tytuł posta">
 
-            <label for="post-images">Dodaj zdjęcia:</label>
-            <input type="file" id="post-images" multiple accept="image/*"><br>
+                <label for="post-type">Typ posta:</label>
+                <select id="post-type">
+                    <option value="Asking for help">Asking for help</option>
+                    <option value="Feature Idea">Feature Idea</option>
+                    <option value="Bug report">Bug report</option>
+                    <option value="Just talking">Just talking</option>
+                </select><br>
 
-            <button id="add-post-btn">Dodaj post</button>
+                <textarea id="post-content" placeholder="Napisz nowy post..." rows="3"></textarea><br>
+
+                <label for="post-images">Dodaj zdjęcia:</label>
+                <input type="file" id="post-images" multiple accept="image/*"><br>
+
+                <button id="add-post-btn">Dodaj post</button>
+            </div>
         </div>
 
         <!-- Filtry postów -->
