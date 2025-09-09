@@ -15,16 +15,25 @@ async function initDevlog() {
     renderUserBar();
     renderDevlogs();
 
-    // Widoczność sekcji "Dodaj devlog"
-    const newSection = document.getElementById('new-devlog-section');
-    if (newSection) {
-      if (currentUser && currentUser.role === 'admin') {
-        newSection.classList.remove('hidden');
-        document.getElementById('add-devlog-btn').addEventListener('click', addDevlog);
-      } else {
-        newSection.classList.add('hidden');
-      }
+    // Widoczność przycisku "Dodaj devlog"
+    const adminBtn = document.getElementById('admin-add-btn');
+    if (currentUser && currentUser.role === 'admin') {
+      adminBtn.classList.remove('hidden');
+      document.getElementById('open-add-devlog').addEventListener('click', () => {
+        document.getElementById('add-devlog-modal').classList.remove('hidden');
+      });
+    } else {
+      adminBtn.classList.add('hidden');
     }
+
+    // Obsługa zamykania modala dodawania
+    document.getElementById('close-add-devlog').addEventListener('click', () => {
+      document.getElementById('add-devlog-modal').classList.add('hidden');
+    });
+
+    // Obsługa przycisku "Dodaj devlog"
+    document.getElementById('add-devlog-btn').addEventListener('click', addDevlog);
+
   } catch (err) {
     console.error(err);
     alert("Nie można połączyć się z serwerem.");
@@ -63,7 +72,7 @@ function renderDevlogs() {
   devlogs.forEach(log => {
     const div = document.createElement('div');
     div.className = 'devlog';
-    
+
     // Miniaturka + tytuł i data
     div.innerHTML = `
       <div class="devlog-header">
@@ -83,32 +92,50 @@ function renderDevlogs() {
 
 // Modal devloga
 function openDevlogModal(log) {
-  // Tworzymy overlay
   const overlay = document.createElement('div');
   overlay.className = 'devlog-modal-overlay';
 
   const modal = document.createElement('div');
   modal.className = 'devlog-modal';
-  
+
   modal.innerHTML = `
     <button class="close-modal">✖</button>
-    <h2>${log.title}</h2>
-    <div class="meta">${new Date(log.createdAt).toLocaleString()}</div>
-    <p>${log.content}</p>
-    ${log.images && log.images.length ? `<div class="devlog-images">${log.images.map(url => `<img src="${url}">`).join('')}</div>` : ''}
+    <div class="devlog-main">
+      <div class="devlog-left">
+        <h2>${log.title}</h2>
+        <div class="meta">${new Date(log.createdAt).toLocaleString()}</div>
+        <p>${log.content}</p>
+      </div>
+      <div class="devlog-right">
+        ${log.images && log.images.length ? log.images.map((url, i) => `<img src="${url}" data-index="${i}" class="devlog-img">`).join('') : ''}
+      </div>
+    </div>
   `;
 
   overlay.appendChild(modal);
   document.body.appendChild(overlay);
 
+  // Zamknięcie
   overlay.querySelector('.close-modal').addEventListener('click', () => overlay.remove());
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+  // Obsługa kliknięcia na zdjęcia
+  if (log.images && log.images.length) {
+    modal.querySelectorAll('.devlog-img').forEach(img => {
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const index = parseInt(img.dataset.index, 10);
+        openImageGallery(log.images, index);
+      });
+    });
+  }
 }
 
 // Dodawanie devloga (admin)
 async function addDevlog() {
   const title = document.getElementById('devlog-title').value.trim();
   const content = document.getElementById('devlog-content').value.trim();
+  const thumbnailInput = document.getElementById('devlog-thumbnail');
   const files = document.getElementById('devlog-images').files;
 
   if (!title || !content) {
@@ -116,13 +143,21 @@ async function addDevlog() {
     return;
   }
 
+  // Wymuszenie miniaturki
+  if (!thumbnailInput.files || !thumbnailInput.files[0]) {
+    alert('Musisz dodać miniaturkę devloga.');
+    return;
+  }
+
   const formData = new FormData();
   formData.append('title', title);
   formData.append('content', content);
+  formData.append('thumbnail', thumbnailInput.files[0]); // obowiązkowa miniaturka
 
-  // Pliki: pierwszy jako miniaturka, reszta jako images
-  if (files.length) formData.append('thumbnail', files[0]);
-  for (let i = 1; i < files.length; i++) formData.append('images', files[i]);
+  // Dodanie dodatkowych zdjęć (jeśli są)
+  for (let i = 0; i < files.length; i++) {
+    formData.append('images', files[i]);
+  }
 
   const res = await fetch(`${API}/devlogs`, {
     method: 'POST',
@@ -135,11 +170,46 @@ async function addDevlog() {
     renderDevlogs();
     document.getElementById('devlog-title').value = '';
     document.getElementById('devlog-content').value = '';
+    document.getElementById('devlog-thumbnail').value = '';
     document.getElementById('devlog-images').value = '';
   } else {
     const err = await res.json();
     alert(err.message || 'Błąd');
   }
 }
+
+// Galeria zdjęć fullscreen
+function openImageGallery(images, startIndex = 0) {
+  const modal = document.createElement('div');
+  modal.className = 'img-modal';
+  Object.assign(modal.style, {
+    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+    background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 20000
+  });
+
+  let idx = startIndex;
+  const imgEl = document.createElement('img');
+  imgEl.src = images[idx];
+  imgEl.style.maxWidth = '90%';
+  imgEl.style.maxHeight = '90%';
+  modal.appendChild(imgEl);
+
+  // przyciski
+  const prev = document.createElement('button');
+  prev.textContent = '<';
+  Object.assign(prev.style, { position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', fontSize: '24px', background: 'none', color: 'white', border: 'none', cursor: 'pointer' });
+  prev.addEventListener('click', (e) => { e.stopPropagation(); idx = (idx - 1 + images.length) % images.length; imgEl.src = images[idx]; });
+  modal.appendChild(prev);
+
+  const next = document.createElement('button');
+  next.textContent = '>';
+  Object.assign(next.style, { position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', fontSize: '24px', background: 'none', color: 'white', border: 'none', cursor: 'pointer' });
+  next.addEventListener('click', (e) => { e.stopPropagation(); idx = (idx + 1) % images.length; imgEl.src = images[idx]; });
+  modal.appendChild(next);
+
+  modal.addEventListener('click', () => document.body.removeChild(modal));
+  document.body.appendChild(modal);
+}
+
 
 initDevlog();
