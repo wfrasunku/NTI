@@ -211,5 +211,4 @@ function openImageGallery(images, startIndex = 0) {
   document.body.appendChild(modal);
 }
 
-
 initDevlog();

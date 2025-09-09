@@ -3,14 +3,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!navbarContainer) return;
 
   // Załaduj HTML navbara
-  const html = await fetch("/components/navbar.html").then(r => r.text());
+  const html = await fetch("/navbar/navbar.html").then(r => r.text());
   navbarContainer.innerHTML = html;
 
   // Dodaj CSS jeśli jeszcze nie ma
-  if (!document.querySelector("link[href='/components/navbar.css']")) {
+  if (!document.querySelector("link[href='/navbar/navbar.css']")) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/components/navbar.css";
+    link.href = "/navbar/navbar.css";
     document.head.appendChild(link);
   }
 
