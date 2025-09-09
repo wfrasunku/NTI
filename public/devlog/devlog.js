@@ -12,7 +12,6 @@ async function initDevlog() {
     const logsRes = await fetch(`${API}/devlogs`, { credentials: 'include' });
     if (logsRes.ok) devlogs = await logsRes.json();
 
-    renderUserBar();
     renderDevlogs();
 
     // Widoczność przycisku "Dodaj devlog"
@@ -37,25 +36,6 @@ async function initDevlog() {
   } catch (err) {
     console.error(err);
     alert("Nie można połączyć się z serwerem.");
-  }
-}
-
-// Pasek użytkownika
-function renderUserBar() {
-  const userInfo = document.getElementById('user-info');
-  if (!userInfo) return;
-
-  if (currentUser) {
-    userInfo.innerHTML = `
-      Zalogowano jako: <b>${currentUser.username}</b> (${currentUser.role})
-      <button id="logoutBtn">Wyloguj</button>
-    `;
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await fetch(`${API}/logout`, { method: 'POST', credentials: 'include' });
-      window.location.href = '../index.html';
-    });
-  } else {
-    userInfo.innerHTML = `Nie jesteś zalogowany. <a href="../login/login.html">Zaloguj się</a>`;
   }
 }
 

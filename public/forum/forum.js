@@ -17,8 +17,6 @@ async function initForum() {
         if (postsRes.ok) posts = await postsRes.json();
 
         setupFilterListeners();
-        renderUserBar();
-        renderUserList();
         renderPosts();
 
         if (currentUser) {
@@ -41,7 +39,6 @@ async function initForum() {
         alert("Nie można połączyć się z serwerem.");
     }
 }
-
 
 // ====== Filtry ======
 function setupFilterListeners() {
@@ -85,45 +82,6 @@ function setupFilterListeners() {
             filterType = '';
             renderPosts();
         });
-    }
-}
-
-// ====== Pasek użytkownika ======
-function renderUserBar() {
-    const userInfo = document.getElementById('user-info');
-    if (!userInfo) return;
-
-    if (currentUser) {
-        userInfo.innerHTML = `
-            Zalogowano jako: <b>${currentUser.username}</b> (${currentUser.role})
-            <button id="logoutBtn">Wyloguj</button>
-        `;
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            await fetch(`${API}/logout`, { method: 'POST', credentials: 'include' });
-            window.location.href = '../index.html';
-        });
-    } else {
-        userInfo.innerHTML = `Nie jesteś zalogowany. <a href="../login/login.html">Zaloguj się</a>`;
-    }
-}
-
-// ====== Lista użytkowników ======
-async function renderUserList() {
-    if (!currentUser) return;
-    try {
-        const res = await fetch(`${API}/users`, { credentials: 'include' });
-        if (!res.ok) return;
-        const users = await res.json();
-
-        const userList = document.getElementById('user-list');
-        userList.innerHTML = '';
-        users.forEach(u => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="/account/account.html?user=${encodeURIComponent(u.username)}" class="${u.role === 'admin' ? 'admin-user' : ''}">${u.username}</a>`;
-            userList.appendChild(li);
-        });
-    } catch (err) {
-        console.error(err);
     }
 }
 
@@ -267,7 +225,7 @@ function renderPosts() {
         contentDiv.className = 'post-content';
         postDiv.appendChild(contentDiv);
 
-        // Przycisk "czytaj dalej / schowaj"
+        // Read more
         if (post.content.length > 200) { // tylko dla dłuższych postów
             const toggleBtn = document.createElement('button');
             toggleBtn.textContent = 'Czytaj dalej';
@@ -284,7 +242,6 @@ function renderPosts() {
 
             postDiv.appendChild(toggleBtn);
         }
-
 
         // Zdjęcia
         if (post.images && post.images.length) {
@@ -381,13 +338,28 @@ function openImageGallery(images, startIndex = 0) {
     document.body.appendChild(modal);
 }
 
-// ====== Akcje postów / komentarzy ======
+// ====== Usuń post ======
 async function deletePost(postId) {
     await fetch(`${API}/posts/${postId}`, { method: 'DELETE', credentials: 'include' });
     posts = posts.filter(p => p._id !== postId);
     renderPosts();
 }
 
+// ====== Like post ======
+async function likePost(postId) {
+    await fetch(`${API}/posts/${postId}/like`, { method: 'POST', credentials: 'include' });
+    posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
+    renderPosts();
+}
+
+// ====== Dislike post ======
+async function dislikePost(postId) {
+    await fetch(`${API}/posts/${postId}/dislike`, { method: 'POST', credentials: 'include' });
+    posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
+    renderPosts();
+}
+
+// ====== Usuń komentarz ======
 async function addComment(postId) {
     const contentEl = document.getElementById(`comment-input-${postId}`);
     if (!contentEl) return;
@@ -403,23 +375,11 @@ async function addComment(postId) {
     renderPosts();
 }
 
+// ====== Dodaj komentarz ======
 async function deleteComment(postId, commentId) {
     await fetch(`${API}/posts/${postId}/comments/${commentId}`, { method: 'DELETE', credentials: 'include' });
     posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
     renderPosts();
 }
 
-async function likePost(postId) {
-    await fetch(`${API}/posts/${postId}/like`, { method: 'POST', credentials: 'include' });
-    posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
-    renderPosts();
-}
-
-async function dislikePost(postId) {
-    await fetch(`${API}/posts/${postId}/dislike`, { method: 'POST', credentials: 'include' });
-    posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
-    renderPosts();
-}
-
-// ====== Start ======
 initForum();
