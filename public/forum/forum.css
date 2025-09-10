@@ -1,7 +1,9 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background-color: #f4f4f4;
+    min-height: 100vh;
+    background: url("../images/planksBackground.png") no-repeat center center;
+    background-size: cover;
 }
 
 
