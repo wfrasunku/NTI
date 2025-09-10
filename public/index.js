@@ -55,13 +55,15 @@ document.querySelectorAll(".hover-object").forEach(obj => {
 // ================== PRELOADER ==================
 window.addEventListener("load", () => {
     const preloader = document.getElementById("preloader");
+    const progress = document.getElementById("progress");
 
-    if (localStorage.getItem("hasSeenLoader")) {
+    // Jeśli użytkownik już widział preloader w tej sesji – ukryj
+    if (sessionStorage.getItem("hasSeenLoader")) {
         preloader.style.display = "none";
         return;
     }
 
-    const progress = document.getElementById("progress");
+    // Inaczej – pokaż preloader i rozpocznij animację
     let load = 0;
     const interval = setInterval(() => {
         load += 2;
@@ -75,10 +77,12 @@ window.addEventListener("load", () => {
                 preloader.style.display = "none";
             }, 1500);
 
-            localStorage.setItem("hasSeenLoader", "true");
+            // Zapisz w sessionStorage, że już pokazaliśmy preloader
+            sessionStorage.setItem("hasSeenLoader", "true");
         }
     }, 50);
 });
+
 
 // ================== LOGIN/PROFILE SWITCH ==================
 document.addEventListener("DOMContentLoaded", async () => {

@@ -36,10 +36,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         <button id="logoutBtn">Wyloguj</button>
       `;
 
-      document.getElementById('logoutBtn').addEventListener('click', async () => {
-        await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-        window.location.reload();
-      });
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+
+            // 🔁 Resetuj preloader dla nowej sesji
+            sessionStorage.removeItem('hasSeenLoader');
+
+            // Przejdź na stronę główną, gdzie preloader się pojawi
+            window.location.href = '/index.html';
+        });
     } else {
       userInfo.innerHTML = `Nie jesteś zalogowany → <a href="/login/login.html">Log in</a>`;
     }

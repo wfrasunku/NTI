@@ -1,7 +1,9 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background-color: #f4f4f4;
+    min-height: 100vh;
+    background: url("../images/planksBackground.png") no-repeat center center;
+    background-size: cover;
 }
 
 
@@ -9,8 +11,9 @@ body {
 .container {
     max-width: 800px;
     margin: 80px auto 20px auto;
-    background: white;
-    padding: 20px;
+    background: url("../images/postBackground.png") no-repeat center center;
+    background-size: 100% 100%;
+    padding: 40px;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

@@ -17,7 +17,13 @@ async function login() {
         const data = await res.json();
 
         if (res.ok) {
+            // 🔁 Resetuj preloader po zalogowaniu
+            sessionStorage.removeItem('hasSeenLoader');
+
+            // Przechowuj nazwę użytkownika (jeśli potrzebne)
             localStorage.setItem('loggedInUser', username);
+
+            // Przekieruj na stronę główną z preloaderem
             window.location.href = '../index.html';
         } else {
             message.style.color = 'red';
