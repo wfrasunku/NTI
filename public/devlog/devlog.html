@@ -8,56 +8,57 @@
 </head>
 
 <body>
-  <!-- navbar -->
-  <div id="navbar-container"></div>
 
-  <div class="container">
-    <h1>Devlog</h1>
+    <div id="navbar-container"></div>
 
-    <!-- Guzik dla admina -->
-    <div id="admin-add-btn" class="hidden">
-      <button id="open-add-devlog">➕ Dodaj devlog</button>
+    <div class="container">
+        <h1>Devlog</h1>
+
+        <!-- Guzik dla admina -->
+        <div id="admin-add-btn" class="hidden">
+            <button id="open-add-devlog">➕ Dodaj devlog</button>
+        </div>
+
+        <!-- Modal formularza dodawania devloga -->
+        <div id="add-devlog-modal" class="hidden">
+            <div class="modal-content">
+                <span id="close-add-devlog">&times;</span>
+                <h2>Dodaj nowy devlog</h2>
+
+                <label for="devlog-title">Tytuł:</label>
+                <input type="text" id="devlog-title" placeholder="Podaj tytuł"><br>
+
+                <textarea id="devlog-content" placeholder="Napisz treść devloga..." rows="3"></textarea><br>
+
+                <label for="devlog-thumbnail">Miniaturka:</label>
+                <input type="file" id="devlog-thumbnail" accept="image/*"><br>
+
+                <label for="devlog-images">Zdjęcia:</label>
+                <input type="file" id="devlog-images" multiple accept="image/*"><br>
+
+                <button id="add-devlog-btn">Dodaj devlog</button>
+            </div>
+        </div>
+
+
+        <!-- Lista devlogów -->
+        <div id="devlogs-container"></div>
     </div>
 
-    <!-- Modal formularza dodawania devloga -->
-    <div id="add-devlog-modal" class="hidden">
-      <div class="modal-content">
-        <span id="close-add-devlog">&times;</span>
-        <h2>Dodaj nowy devlog</h2>
-
-        <label for="devlog-title">Tytuł:</label>
-        <input type="text" id="devlog-title" placeholder="Podaj tytuł"><br>
-
-        <textarea id="devlog-content" placeholder="Napisz treść devloga..." rows="3"></textarea><br>
-
-        <label for="devlog-thumbnail">Miniaturka:</label>
-        <input type="file" id="devlog-thumbnail" accept="image/*"><br>
-
-        <label for="devlog-images">Zdjęcia:</label>
-        <input type="file" id="devlog-images" multiple accept="image/*"><br>
-
-        <button id="add-devlog-btn">Dodaj devlog</button>
-      </div>
+    <!-- Modal (szczegóły devloga) -->
+    <div id="devlog-modal" class="hidden">
+        <div class="modal-content">
+            <span id="modal-close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-date"></p>
+            <p id="modal-content-text"></p>
+            <div id="modal-images"></div>
+        </div>
     </div>
 
+    <script src="devlog.js"></script>
 
-    <!-- Lista devlogów -->
-    <div id="devlogs-container"></div>
-  </div>
-
-  <!-- Modal (szczegóły devloga) -->
-  <div id="devlog-modal" class="hidden">
-    <div class="modal-content">
-      <span id="modal-close">&times;</span>
-      <h2 id="modal-title"></h2>
-      <p id="modal-date"></p>
-      <p id="modal-content-text"></p>
-      <div id="modal-images"></div>
-    </div>
-  </div>
-
-  <script src="devlog.js"></script>
-  <script src="/navbar/navbar.js"></script>
+    <script src="../navbar/navbar.js"></script>
 </body>
 
 </html>
