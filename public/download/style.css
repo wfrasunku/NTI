@@ -33,18 +33,6 @@ header {
     align-items: center;
 }
 
-    /*.content img {
-        max-width: 800px;*/ /* lub 100% je?li chcesz responsywnie */
-        /*width: 100%;
-        height: auto;*/
-/*        margin-top: 140px;*/
-    /*}
-
-    .content video {
-        max-width: 800px;*/ /* lub 100% je?li chcesz responsywnie */
-        /*width: 100%;
-        height: auto;
-    }*/
 
 .topImages {
     margin-top: 140px;

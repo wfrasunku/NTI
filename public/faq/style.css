@@ -1,7 +1,9 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    min-height: 100vh;
+    background: url("../images/planksBackground.png") no-repeat center center;
+    background-size: cover;
 }
 
 header {
@@ -23,11 +25,11 @@ header {
 }
 
 .faq-item {
-  background: white;
-  margin: 10px 0;
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    background: url("../images/postBackground.png") no-repeat center center;
+    background-size: 100% 80%;
+    margin: 5px 0;
+    padding: 60px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
 .faq-item h3 {
