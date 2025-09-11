@@ -282,12 +282,16 @@ function renderPosts() {
                     onclick="dislikePost('${post._id}')">
             `;
             actions.innerHTML += `
-                <input id="comment-input-${post._id}" placeholder="Komentarz">
+                <div class="comment" 
+                    id="comment-input-${post._id}" 
+                    contenteditable="true" 
+                    style="margin: 5px; display:inline-block;"></div>
                 <img src="/images/forum/add.png" 
                     class="add-icon small" 
                     alt="Dodaj komentarz" 
                     onclick="addComment('${post._id}')">
             `;
+
             if (currentUser && (currentUser.role === 'admin' || currentUser._id === post.author?._id)) {
                 const deleteIcon = document.createElement('img');
                 deleteIcon.src = "/images/forum/Delete.png";
@@ -376,7 +380,7 @@ async function dislikePost(postId) {
     renderPosts();
 }
 
-// ====== Usuń komentarz ======
+// ====== Dodaj komentarz ======
 async function addComment(postId) {
     const contentEl = document.getElementById(`comment-input-${postId}`);
     if (!contentEl) return;
@@ -392,7 +396,7 @@ async function addComment(postId) {
     renderPosts();
 }
 
-// ====== Dodaj komentarz ======
+// ====== Usuń komentarz ======
 async function deleteComment(postId, commentId) {
     await fetch(`${API}/posts/${postId}/comments/${commentId}`, { method: 'DELETE', credentials: 'include' });
     posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
