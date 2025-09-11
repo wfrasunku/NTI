@@ -1,6 +1,4 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
     background: url("../images/planksBackground.png") ;
     background-repeat: repeat;
     background-size: 100% auto;
@@ -134,8 +132,8 @@ button:hover {
 /* Ikona usuwania (posta i komentarza) */
 .delete-icon {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 12px;
+    right: 12px;
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
@@ -148,11 +146,6 @@ button:hover {
 .delete-icon.small {
     width: 16px;
     height: 16px;
-}
-
-/* Upewniamy się, że post i komentarz są relative */
-.post, .comment {
-    position: relative;
 }
 
 /* Treść posta z ograniczeniem do 4 linii */
@@ -185,23 +178,24 @@ button:hover {
 }
 
 .post, .comment {
-    padding: 10px;
-    margin-bottom: 10px;
+    position: relative;
+    padding: 25px;
     border-radius: 5px;
-    background: url("../images/post_bg.png") no-repeat center center;
+    background: url("../images/forumPostBackground.png") no-repeat center center;
+}
 
-    clip-path: polygon(
-        0% 0%, 5% 8%, 10% 2%, 15% 12%, 20% 5%, 
-        25% 15%, 30% 7%, 35% 18%, 40% 10%, 45% 20%, 
-        50% 12%, 55% 22%, 60% 15%, 65% 25%, 70% 18%, 
-        75% 28%, 80% 20%, 85% 30%, 90% 22%, 95% 32%, 
-        100% 25%, 100% 0%, 0% 0%
-    );
+.post {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 1);
+    margin-bottom: 40px;
 }
 
 .comment {
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: 20px;
-    background-color: #f0f0f0;
+    background: url("../images/forumCommentBackground.png") no-repeat center center;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+    
     font-size: 14px;
     padding: 8px;
 }
