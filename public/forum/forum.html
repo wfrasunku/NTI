@@ -11,9 +11,37 @@
     <!-- navbar -->
     <div id="navbar-container"></div>
 
-    <div class="container">
-        <h1>Forum</h1>
+    <!-- Filtry postów -->
+    <div class="container small">
+        <h1 style="text-align: center; margin: 10px ;">Forum</h1>
 
+        <div class="filter-bar">
+            <!-- Wyszukiwarka po tytule -->
+            <input type="text" id="filter-title" placeholder="Szukaj po tytule...">
+
+             <!-- Sortowanie -->
+            <select id="filter-sort">
+                <option value="newest">Od najnowszych</option>
+                <option value="oldest">Od najstarszych</option>
+                <option value="most-liked">Najwięcej lajków</option>
+                <option value="most-disliked">Najwięcej dislajków</option>
+            </select>
+
+             <!-- Filtr typu -->
+            <select id="filter-type">
+                <option value="">Wszystkie typy</option>
+                <option value="Asking for help">Asking for help</option>
+                <option value="Feature Idea">Feature Idea</option>
+                <option value="Bug report">Bug report</option>
+                <option value="Just talking">Just talking</option>
+            </select>
+
+            <!-- Reset -->
+            <button id="filter-reset">Resetuj filtry</button>
+        </div>
+
+    </div>
+    <div class="container large">
         <!-- Dodawanie postów (tylko zalogowani) -->
         <div id="add-post-wrapper" class="hidden">
             <img src="/images/forum/add.png" id="open-post-modal" class="add-icon large" alt="Dodaj post">
@@ -43,34 +71,6 @@
 
                 <img src="/images/forum/add.png" id="add-post-btn" class="add-icon large" alt="Dodaj post">
             </div>
-        </div>
-
-        <!-- Filtry postów -->
-        <div id="filters" style="margin:20px 0; padding:10px; border:1px solid #ddd; border-radius:8px;">
-            <h3>Filtry</h3>
-
-            <!-- Wyszukiwarka po tytule -->
-            <input type="text" id="filter-title" placeholder="Szukaj po tytule..." style="margin-right:10px;">
-
-            <!-- Sortowanie -->
-            <select id="filter-sort" style="margin-right:10px;">
-                <option value="newest">Od najnowszych</option>
-                <option value="oldest">Od najstarszych</option>
-                <option value="most-liked">Najwięcej lajków</option>
-                <option value="most-disliked">Najwięcej dislajków</option>
-            </select>
-
-            <!-- Filtr typu -->
-            <select id="filter-type" style="margin-right:10px;">
-                <option value="">Wszystkie typy</option>
-                <option value="Asking for help">Asking for help</option>
-                <option value="Feature Idea">Feature Idea</option>
-                <option value="Bug report">Bug report</option>
-                <option value="Just talking">Just talking</option>
-            </select>
-
-            <!-- Reset -->
-            <button id="filter-reset">Resetuj filtry</button>
         </div>
 
         <!-- Kontener postów -->

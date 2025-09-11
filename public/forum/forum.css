@@ -40,12 +40,35 @@ body {
 
 /* Forum */
 .container {
-    max-width: 800px;
-    margin: 80px auto 20px auto;
+    max-width: 1600px;
     background: white;
-    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.container.small {
+    background: url("../images/postBackground.png") no-repeat center center;
+    background-size: 80% 100%;
+    margin: 60px auto 20px auto;
+    padding: 20px;
+}
+
+.container.large {
+    margin: 20px auto 20px auto;
+    padding: 20px;
+}
+
+.filter-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;         
+    flex-wrap: wrap;
+}
+
+.filter-bar input, .filter-bar select, .filter-bar button {
+    font-size: 12px;
+    min-width: 200px;
+    border-radius: 5px;
 }
 
 textarea {
