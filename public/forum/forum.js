@@ -271,15 +271,31 @@ function renderPosts() {
         const actions = document.createElement('div');
         actions.className = 'post-actions';
         if (currentUser) {
-            actions.innerHTML += `<button onclick="likePost('${post._id}')">👍</button>`;
-            actions.innerHTML += `<button onclick="dislikePost('${post._id}')">👎</button>`;
-            actions.innerHTML += `<input id="comment-input-${post._id}" placeholder="Komentarz"> <button onclick="addComment('${post._id}')">Dodaj</button>`;
-            if (currentUser._id === post.author?._id) {
-                actions.innerHTML += `<button onclick="editPost('${post._id}')">Edytuj post</button>`;
+            actions.innerHTML += `
+                <img src="/images/forum/Like.png" 
+                    class="action-icon like-icon" 
+                    onclick="likePost('${post._id}')">
+            `;
+            actions.innerHTML += `
+                <img src="/images/forum/Dislike.png" 
+                    class="action-icon dislike-icon" 
+                    onclick="dislikePost('${post._id}')">
+            `;
+            actions.innerHTML += `
+                <input id="comment-input-${post._id}" placeholder="Komentarz">
+                <img src="/images/forum/add.png" 
+                    class="add-icon" 
+                    alt="Dodaj komentarz" 
+                    onclick="addComment('${post._id}')">
+            `;
+            if (currentUser && (currentUser.role === 'admin' || currentUser._id === post.author?._id)) {
+                const deleteIcon = document.createElement('img');
+                deleteIcon.src = "/images/forum/Delete.png";
+                deleteIcon.className = "delete-icon";
+                deleteIcon.onclick = () => deletePost(post._id);
+                postDiv.appendChild(deleteIcon);
             }
-            if (currentUser.role === 'admin' || currentUser._id === post.author?._id) {
-                actions.innerHTML += `<button onclick="deletePost('${post._id}')">Usuń post</button>`;
-            }
+
         }
         postDiv.appendChild(actions);
 
@@ -290,12 +306,14 @@ function renderPosts() {
                 c.className = 'comment';
                 c.innerHTML = `<b><a href="/account/account.html?user=${encodeURIComponent(comment.author?.username || '')}" style="font-weight:bold">${comment.author?.username || '?'}</a>:</b> ${comment.content}`;
                 if (currentUser) {
-                    if (currentUser._id === comment.author?._id) {
-                        c.innerHTML += ` <button onclick="editComment('${post._id}','${comment._id}')">Edytuj</button>`;
+                    if (currentUser && (currentUser.role === 'admin' || currentUser._id === comment.author?._id)) {
+                        const deleteIcon = document.createElement('img');
+                        deleteIcon.src = "/images/forum/Delete.png";
+                        deleteIcon.className = "delete-icon";
+                        deleteIcon.onclick = () => deleteComment(post._id, comment._id);
+                        c.appendChild(deleteIcon);
                     }
-                    if (currentUser.role === 'admin' || currentUser._id === comment.author?._id) {
-                        c.innerHTML += ` <button onclick="deleteComment('${post._id}','${comment._id}')">Usuń</button>`;
-                    }
+
                 }
                 postDiv.appendChild(c);
             });

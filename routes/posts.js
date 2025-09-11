@@ -111,13 +111,21 @@ router.delete('/posts/:postId/comments/:commentId', async (req, res) => {
     const comment = post.comments.id(req.params.commentId);
     if (!comment) return res.status(404).json({ message: 'Komentarz nie istnieje' });
 
+    // Sprawdzenie uprawnień
     if (req.session.user.username !== comment.author.username && req.session.user.role !== 'admin') {
         return res.status(403).json({ message: 'Brak uprawnień' });
     }
 
-    comment.remove();
+    // ✅ zamiast .remove()
+    post.comments.pull(req.params.commentId);
+
     await post.save();
-    res.json(post);
+
+    const fullPost = await Post.findById(post._id)
+        .populate('author', 'username _id')
+        .populate('comments.author', 'username _id');
+
+    res.json(fullPost);
 });
 
 // Like post

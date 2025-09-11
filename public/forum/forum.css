@@ -6,8 +6,6 @@ body {
     background-size: cover;
 }
 
-
-
 /* Modal nowego posta */
 #post-modal {
   position: fixed;
@@ -73,6 +71,46 @@ button {
 
 button:hover {
     background-color: #3498db;
+}
+
+/* Ikony like/dislike */
+.action-icon {
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    vertical-align: middle;
+}
+
+/* Ikonka dodawania (post/komentarz) */
+.add-icon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 4px;
+    vertical-align: middle;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.add-icon:hover, .action-icon:hover, .delete-icon:hover {
+    transform: scale(1.15);
+    filter: brightness(1.2);
+}
+
+/* Ikona usuwania (posta i komentarza) */
+.delete-icon {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Upewniamy się, że post i komentarz są relative */
+.post, .comment {
+    position: relative;
 }
 
 /* Treść posta z ograniczeniem do 4 linii */
