@@ -82,7 +82,7 @@ button:hover {
     vertical-align: middle;
 }
 
-/* Ikonka dodawania (post/komentarz) */
+/* Ikonka dodawania komentarza */
 .add-icon {
     width: 16px;
     height: 16px;
@@ -90,6 +90,16 @@ button:hover {
     margin: 4px;
     vertical-align: middle;
     transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.add-icon.large {
+    width: 48px;
+    height: 48px;
+}
+
+.add-icon.small {
+    width: 16px;
+    height: 16px;
 }
 
 .add-icon:hover, .action-icon:hover, .delete-icon:hover {
@@ -102,10 +112,18 @@ button:hover {
     position: absolute;
     top: 6px;
     right: 6px;
-    width: 24px;
-    height: 24px;
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.delete-icon.large {
+    width: 32px;
+    height: 32px;
+}
+
+.delete-icon.small {
+    width: 16px;
+    height: 16px;
 }
 
 /* Upewniamy się, że post i komentarz są relative */

@@ -284,14 +284,14 @@ function renderPosts() {
             actions.innerHTML += `
                 <input id="comment-input-${post._id}" placeholder="Komentarz">
                 <img src="/images/forum/add.png" 
-                    class="add-icon" 
+                    class="add-icon small" 
                     alt="Dodaj komentarz" 
                     onclick="addComment('${post._id}')">
             `;
             if (currentUser && (currentUser.role === 'admin' || currentUser._id === post.author?._id)) {
                 const deleteIcon = document.createElement('img');
                 deleteIcon.src = "/images/forum/Delete.png";
-                deleteIcon.className = "delete-icon";
+                deleteIcon.className = "delete-icon large";
                 deleteIcon.onclick = () => deletePost(post._id);
                 postDiv.appendChild(deleteIcon);
             }
@@ -309,11 +309,10 @@ function renderPosts() {
                     if (currentUser && (currentUser.role === 'admin' || currentUser._id === comment.author?._id)) {
                         const deleteIcon = document.createElement('img');
                         deleteIcon.src = "/images/forum/Delete.png";
-                        deleteIcon.className = "delete-icon";
+                        deleteIcon.className = "delete-icon small";
                         deleteIcon.onclick = () => deleteComment(post._id, comment._id);
                         c.appendChild(deleteIcon);
                     }
-
                 }
                 postDiv.appendChild(c);
             });
