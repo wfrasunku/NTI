@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let originalUsername = null;
     let loggedInUserRole = 'user';
     let originalImageSrc = '';
+    let viewedUserRole = 'user'; // 🔹 rola oglądanego profilu
 
     // Pobranie zalogowanego użytkownika
     try {
@@ -52,6 +53,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('profile-description').innerText = data.description || 'Brak opisu';
         document.getElementById('profile-gender').innerText = data.gender === 'female' ? 'Kobieta' : 'Mężczyzna';
 
+        viewedUserRole = data.role; // 🔹 zapisz rolę oglądanego użytkownika
+
         const defaultImage = data.gender === 'female' ? '../images/default-female.png' : '../images/default-male.png';
         const imageToShow = data.profileImage?.trim() ? data.profileImage : defaultImage;
         document.getElementById('profile-image').src = imageToShow;
@@ -61,30 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('edit-username').value = data.username;
             document.getElementById('edit-gender').value = data.gender;
             document.getElementById('edit-description').value = data.description || '';
-        }
-
-        if (isOwnProfile) {
-            editBtn.addEventListener('click', () => {
-                viewMode.classList.add('hidden');
-                editMode.classList.remove('hidden');
-                editBtn.style.display = 'none';   
-            });
-
-            cancelBtn.addEventListener('click', () => {
-                editMode.classList.add('hidden');
-                viewMode.classList.remove('hidden');
-                editBtn.style.display = 'inline-block'; 
-            });
-
-            document.getElementById('edit-mode').addEventListener('submit', async e => {
-                e.preventDefault();
-                if (response.ok) {
-                    await loadUserData(result.username);
-                    editMode.classList.add('hidden');
-                    viewMode.classList.remove('hidden');
-                    editBtn.style.display = 'inline-block'; 
-                }
-            });
         }
     }
 
@@ -110,14 +89,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const postDiv = document.createElement('div');
                 postDiv.className = 'user-post';
 
-                // Nagłówek posta
                 const header = document.createElement('div');
                 header.className = 'post-header';
                 header.innerHTML = `<a href="/account/account.html?user=${post.author.username}">${post.author.username}</a>
                                 <span>[${post.type}] • ${new Date(post.createdAt).toLocaleString()}</span>`;
                 postDiv.appendChild(header);
 
-                // Tytuł posta
                 if (post.title) {
                     const titleEl = document.createElement('h4');
                     titleEl.className = 'post-title';
@@ -125,7 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     postDiv.appendChild(titleEl);
                 }
 
-                // Treść
                 const content = document.createElement('div');
                 content.className = 'post-content';
 
@@ -161,7 +137,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 postDiv.appendChild(content);
 
-                // Obrazy
                 if (post.images && post.images.length > 0) {
                     const imagesDiv = document.createElement('div');
                     imagesDiv.className = 'post-images';
@@ -174,7 +149,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         img.style.borderRadius = '5px';
                         img.style.cursor = 'pointer';
 
-                        // Otwórz galerię po kliknięciu
                         img.addEventListener('click', () => {
                             openImageGallery(post.images, index);
                         });
@@ -191,7 +165,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error(err);
         }
     }
-
 
     await loadUserData(viewedUsername);
     await loadUserPosts(viewedUsername);
@@ -216,7 +189,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         imgEl.style.borderRadius = '8px';
         modal.appendChild(imgEl);
 
-        // Poprzednie
         const prev = document.createElement('button');
         prev.textContent = '<';
         Object.assign(prev.style, { position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', fontSize: '24px', background: 'transparent', color: 'white', border: 'none', cursor: 'pointer' });
@@ -227,7 +199,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         modal.appendChild(prev);
 
-        // Następne
         const next = document.createElement('button');
         next.textContent = '>';
         Object.assign(next.style, { position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', fontSize: '24px', background: 'transparent', color: 'white', border: 'none', cursor: 'pointer' });
@@ -241,7 +212,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.addEventListener('click', () => document.body.removeChild(modal));
         document.body.appendChild(modal);
     }
-
 
     // Obsługa powrotu
     if (backBtn) {
@@ -319,16 +289,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Usuwanie konta
     if (deleteBtn) {
+        if (
+            isOwnProfile ||
+            (loggedInUserRole === 'admin' && !isOwnProfile && viewedUserRole !== 'admin')
+        ) {
+            deleteBtn.classList.remove('hidden');
+        }
+
         deleteBtn.addEventListener('click', async () => {
-            const confirmed = confirm("Czy na pewno chcesz usunąć swoje konto?");
+            const targetUser = isOwnProfile ? originalUsername : viewedUsername;
+
+            const confirmed = confirm(
+                isOwnProfile
+                    ? "Czy na pewno chcesz usunąć swoje konto?"
+                    : `Czy na pewno chcesz usunąć konto użytkownika ${targetUser}?`
+            );
             if (!confirmed) return;
+
             try {
-                const res = await fetch(`http://localhost:3000/api/user/${originalUsername}`, {
+                const res = await fetch(`http://localhost:3000/api/user/${targetUser}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
                 if (res.ok) {
-                    alert("Twoje konto zostało usunięte.");
+                    if (isOwnProfile) {
+                        alert("Twoje konto zostało usunięte.");
+                    } else {
+                        alert(`Konto użytkownika ${targetUser} zostało usunięte.`);
+                    }
                     window.location.href = "/index.html";
                 } else {
                     const err = await res.json();
