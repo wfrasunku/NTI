@@ -59,7 +59,6 @@ textarea {
     resize: none;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
     font-family: inherit;
     font-size: 14px;
     margin-bottom: 10px;
@@ -120,15 +119,15 @@ form#edit-mode label {
     margin-top: 10px;
 }
 
-form#edit-mode input[type="text"],
-form#edit-mode select,
-form#edit-mode textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+    form#edit-mode input[type="text"],
+    form#edit-mode select,
+    form#edit-mode textarea {
+        width: 250px;
+        padding: 8px;
+        border-radius: 5px;
+        margin-top: 5px;
+        background: url("../images/forumcommentBackground.png") no-repeat center center;
+    }
 
 #edit-image::-webkit-file-upload-button {
     visibility: hidden;
