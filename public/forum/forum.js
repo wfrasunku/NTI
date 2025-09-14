@@ -263,34 +263,32 @@ function renderPosts() {
         }
 
         // Likes / Dislikes
-        const stats = document.createElement('div');
-        stats.className = 'post-stats';
-        stats.textContent = `Likes: ${post.likes || 0}  •  Dislikes: ${post.dislikes || 0}`;
-        postDiv.appendChild(stats);
-
         const actions = document.createElement('div');
         actions.className = 'post-actions';
         if (currentUser) {
             actions.innerHTML += `
-                <img src="/images/forum/Like.png" 
-                    class="action-icon like-icon" 
-                    onclick="likePost('${post._id}')">
-            `;
-            actions.innerHTML += `
-                <img src="/images/forum/Dislike.png" 
-                    class="action-icon dislike-icon" 
-                    onclick="dislikePost('${post._id}')">
-            `;
-            actions.innerHTML += `
-                <div class="comment" 
-                    id="comment-input-${post._id}" 
-                    contenteditable="true" 
-                    style="margin: 5px; display:inline-block;"></div>
-                <img src="/images/forum/add.png" 
-                    class="add-icon small" 
-                    alt="Dodaj komentarz" 
-                    onclick="addComment('${post._id}')">
-            `;
+        <span class="like-wrapper">
+            <img src="/images/forum/Like.png" 
+                class="action-icon like-icon" 
+                onclick="likePost('${post._id}')">
+            <span class="like-count">${post.likes || 0}</span>
+        </span>
+        <span class="dislike-wrapper">
+            <img src="/images/forum/Dislike.png" 
+                class="action-icon dislike-icon" 
+                onclick="dislikePost('${post._id}')">
+            <span class="dislike-count">${post.dislikes || 0}</span>
+        </span>
+        <div class="comment" 
+            id="comment-input-${post._id}" 
+            contenteditable="true" 
+            style="margin: 5px; display:inline-block;"></div>
+        <img src="/images/forum/add.png" 
+            class="add-icon small" 
+            alt="Dodaj komentarz" 
+            onclick="addComment('${post._id}')">
+    `;
+
 
             if (currentUser && (currentUser.role === 'admin' || currentUser._id === post.author?._id)) {
                 const deleteIcon = document.createElement('img');

@@ -16,10 +16,15 @@
         <h1 style="text-align: center; margin: 10px ;">Forum</h1>
 
         <div class="filter-bar">
+            <!-- Dodawanie postów (tylko zalogowani) -->
+            <div id="add-post-wrapper" class="hidden">
+                <img src="/images/forum/add.png" id="open-post-modal" class="add-icon large" alt="Dodaj post">
+            </div>
+
             <!-- Wyszukiwarka po tytule -->
             <input type="text" id="filter-title" placeholder="Szukaj po tytule...">
 
-             <!-- Sortowanie -->
+            <!-- Sortowanie -->
             <select id="filter-sort">
                 <option value="newest">Od najnowszych</option>
                 <option value="oldest">Od najstarszych</option>
@@ -27,7 +32,7 @@
                 <option value="most-disliked">Najwięcej dislajków</option>
             </select>
 
-             <!-- Filtr typu -->
+            <!-- Filtr typu -->
             <select id="filter-type">
                 <option value="">Wszystkie typy</option>
                 <option value="Asking for help">Asking for help</option>
@@ -42,11 +47,6 @@
 
     </div>
     <div class="container large">
-        <!-- Dodawanie postów (tylko zalogowani) -->
-        <div id="add-post-wrapper" class="hidden">
-            <img src="/images/forum/add.png" id="open-post-modal" class="add-icon large" alt="Dodaj post">
-        </div>
-
         <!-- Modal dodawania posta -->
         <div id="post-modal" class="hidden">
             <div class="modal-content">
