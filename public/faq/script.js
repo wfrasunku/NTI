@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const adminPanel = document.getElementById("admin-panel");
 
     const loggedInUser = localStorage.getItem("loggedInUser");
-    const isAdmin = loggedInUser === "admin"; // prosta symulacja
+    const isAdmin = loggedInUser === "admin"; 
 
     if (isAdmin) adminPanel.classList.remove("hidden");
 
@@ -15,9 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
         faqs.forEach((faq, index) => {
             const item = document.createElement("div");
             item.classList.add("faq-item");
+
+            let answerHtml = `<p>${faq.answer.replace(/\n/g, "<br>")}</p>`;
+
             item.innerHTML = `
         <h3>${faq.question}</h3>
-        <p>${faq.answer}</p>
+        ${answerHtml}
         ${isAdmin ? `<button class="edit-btn" data-index="${index}">✏️ Edytuj</button>` : ""}
       `;
             faqContainer.appendChild(item);

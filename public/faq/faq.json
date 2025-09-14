@@ -1,10 +1,23 @@
 [
     {
+        "question": "Czy gra jest darmowa?",
+        "answer": "Tak."
+    },
+    {
         "question": "Jak zainstalować grę?",
-        "answer": "Pobierz ją z zakładki 'Download' i uruchom instalator."
+        "answer": "Pobierz ją z zakładki 'Download' i już możesz grać."
     },
     {
         "question": "Czy gra wymaga połączenia z internetem?",
-        "answer": "Tak, gra działa tylko online."
+        "answer": "Nie, natomiast możesz pochwalić się swoim czasem na froum."
+    },
+    {
+        "question": "Gdzie zgłaszać błędy lub propozycje?",
+        "answer": "Zachęcamy do używania froum, każda uwaga mile widzana."
+    },
+    {
+        "question": "Kto jest autorami gry?",
+        "answer": "- Mateusz Maciejewski,\n - Antoni Frasuński,\n - Iga Smolarczyk,\n - Kacper Pastuszka,\n - Hanna Mikołajczyk,\n - Antoni Frasuński,\n - Maciej Zielak "
     }
+
 ]
