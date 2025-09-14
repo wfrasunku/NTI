@@ -62,6 +62,30 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('edit-gender').value = data.gender;
             document.getElementById('edit-description').value = data.description || '';
         }
+
+        if (isOwnProfile) {
+            editBtn.addEventListener('click', () => {
+                viewMode.classList.add('hidden');
+                editMode.classList.remove('hidden');
+                editBtn.style.display = 'none';   
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                editMode.classList.add('hidden');
+                viewMode.classList.remove('hidden');
+                editBtn.style.display = 'inline-block'; 
+            });
+
+            document.getElementById('edit-mode').addEventListener('submit', async e => {
+                e.preventDefault();
+                if (response.ok) {
+                    await loadUserData(result.username);
+                    editMode.classList.add('hidden');
+                    viewMode.classList.remove('hidden');
+                    editBtn.style.display = 'inline-block'; 
+                }
+            });
+        }
     }
 
     async function loadUserPosts(username) {
@@ -105,7 +129,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const content = document.createElement('div');
                 content.className = 'post-content';
 
-                // Maksymalna liczba znaków, np. 200
                 const maxLength = 200;
 
                 if (post.content.length > maxLength) {

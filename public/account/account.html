@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <!-- navbar -->
+    <div id="navbar-container"></div>
+
     <div class="top-bar">
         <button id="edit-profile-toggle">Edytuj profil</button>
     </div>
@@ -39,12 +42,14 @@
                 <label for="edit-image">Zdjęcie profilowe:</label>
                 <label for="edit-image" class="custom-file-upload">📁 Wybierz zdjęcie</label>
                 <input type="file" id="edit-image" name="profileImage" accept="image/*">
-                <button type="submit">Zapisz zmiany</button>
-                <button type="button" id="cancel-edit">Anuluj</button>
+                <div class="parent">
+                    <button type="submit" id="save">Zapisz zmiany</button>
+                    <button type="button" id="cancel-edit">Anuluj</button>
+                </div>
             </form>
 
             <p id="save-message" class="hidden"></p>
-            <a href="#" id="back-btn" class="back-button">← Powrót</a>
+            <!--<a href="#" id="back-btn" class="back-button">← Powrót</a>-->
 
             <button id="delete-user-btn" class="hidden">🗑️ Usuń to konto</button>
         </div>
@@ -54,6 +59,10 @@
             <div id="user-posts"></div>
         </div>
     </div>
+
+    <script src="script.js"></script>
+    <script src="../navbar/navbar.js"></script>
+
     <script src="account.js" defer></script>
 </body>
 
