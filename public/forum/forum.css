@@ -118,8 +118,9 @@ textarea {
 }
 
 .add-icon.large {
-    width: 48px;
-    height: 48px;
+    margin: 10px;
+    width: 32px;
+    height: 32px;
 }
 
 .add-icon.small {
@@ -137,7 +138,7 @@ textarea {
     height: 16px;
 }
 
-.add-icon:hover, .action-icon:hover, .reset-icon:hover, .delete-icon:hover, button:hover{
+.add-icon:hover, .action-icon:hover, .reset-icon:hover, .delete-icon:hover, button:hover, .toggle-content-btn:hover {
     transform: scale(1.1);
     filter: brightness(1.2);
 }
@@ -150,6 +151,8 @@ textarea {
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
+    margin-bottom: 10px;
+    margin-left: 30px;
 }
 
 /* Gdy rozwinięty */
@@ -161,14 +164,12 @@ textarea {
 .toggle-content-btn {
     background: none;
     border: none;
-    color: #2980b9;
+    color: #fdf9e0;
     cursor: pointer;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-.toggle-content-btn:hover {
-    text-decoration: underline;
+    font-weight: bold;
+    
+    display: block;
+    margin: 5px auto 0 auto;
 }
 
 .post, .comment {
@@ -194,6 +195,7 @@ textarea {
     color: red;
     font-weight: bold;
     margin-left: 2px;
+    margin-right: 20px;
     font-size: 20px;
 }
 

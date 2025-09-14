@@ -229,6 +229,8 @@ function renderPosts() {
         if (post.title) {
             const titleEl = document.createElement('h3');
             titleEl.textContent = post.title;
+            titleEl.style.marginLeft = '20px';
+            titleEl.style.fontSize = '30px';
             postDiv.appendChild(titleEl);
         }
 
@@ -278,6 +280,8 @@ function renderPosts() {
         // Likes / Dislikes
         const actions = document.createElement('div');
         actions.className = 'post-actions';
+        actions.style.marginLeft = '10px';
+        actions.style.marginTop = '30px';
         if (currentUser) {
             actions.innerHTML += `
             <span class="like-wrapper">
@@ -301,7 +305,6 @@ function renderPosts() {
                 alt="Dodaj komentarz" 
                 onclick="addComment('${post._id}')">
         `;
-
 
             if (currentUser && (currentUser.role === 'admin' || currentUser._id === post.author?._id)) {
                 const deleteIcon = document.createElement('img');
