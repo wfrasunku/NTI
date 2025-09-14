@@ -29,8 +29,8 @@ router.get('/posts', async (req, res) => {
         }
 
         const posts = await Post.find(filter)
-            .populate('author', 'username _id')
-            .populate('comments.author', 'username _id')
+            .populate('author', 'username _id profileImage')
+            .populate('comments.author', 'username _id profileImage')
             .sort({ createdAt: -1 });
 
         res.json(posts);
@@ -63,8 +63,8 @@ router.post('/posts', uploadPosts.array('images', 10), async (req, res) => {
 
         await post.save();
         const fullPost = await Post.findById(post._id)
-            .populate('author', 'username _id')
-            .populate('comments.author', 'username _id');
+            .populate('author', 'username _id profileImage')
+            .populate('comments.author', 'username _id profileImage')
 
         res.status(201).json(fullPost);
     } catch (err) {
@@ -98,8 +98,8 @@ router.post('/posts/:id/comments', async (req, res) => {
     await post.save();
 
     const fullPost = await Post.findById(post._id)
-        .populate('author', 'username _id')
-        .populate('comments.author', 'username _id');
+        .populate('author', 'username _id profileImage')
+        .populate('comments.author', 'username _id profileImage')
     res.json(fullPost);
 });
 
@@ -122,8 +122,8 @@ router.delete('/posts/:postId/comments/:commentId', async (req, res) => {
     await post.save();
 
     const fullPost = await Post.findById(post._id)
-        .populate('author', 'username _id')
-        .populate('comments.author', 'username _id');
+        .populate('author', 'username _id profileImage')
+        .populate('comments.author', 'username _id profileImage')
 
     res.json(fullPost);
 });

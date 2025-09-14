@@ -192,11 +192,24 @@ function renderPosts() {
         // Meta
         const meta = document.createElement('div');
         meta.className = 'post-meta';
+
+        const authorImg = document.createElement('img');
+        authorImg.src = post.author?.profileImage || '/images/default-profile.png';
+        authorImg.alt = post.author?.username || 'user';
+        authorImg.className = 'author-img';
+        authorImg.style.width = '48px';
+        authorImg.style.height = '48px';
+        authorImg.style.verticalAlign = 'middle';
+        authorImg.style.borderRadius = '50%';
+        authorImg.style.marginRight = '6px';
+        meta.appendChild(authorImg);
+
         const authorLink = document.createElement('a');
         const authorName = post.author?.username || 'nieznany';
         authorLink.href = `/account/account.html?user=${encodeURIComponent(authorName)}`;
         authorLink.textContent = authorName;
         authorLink.style.fontWeight = 'bold';
+        authorLink.style.fontSize = '20px';
         meta.appendChild(authorLink);
 
         const typeSpan = document.createElement('span');
@@ -267,27 +280,27 @@ function renderPosts() {
         actions.className = 'post-actions';
         if (currentUser) {
             actions.innerHTML += `
-        <span class="like-wrapper">
-            <img src="/images/forum/Like.png" 
-                class="action-icon like-icon" 
-                onclick="likePost('${post._id}')">
-            <span class="like-count">${post.likes || 0}</span>
-        </span>
-        <span class="dislike-wrapper">
-            <img src="/images/forum/Dislike.png" 
-                class="action-icon dislike-icon" 
-                onclick="dislikePost('${post._id}')">
-            <span class="dislike-count">${post.dislikes || 0}</span>
-        </span>
-        <div class="comment" 
-            id="comment-input-${post._id}" 
-            contenteditable="true" 
-            style="margin: 5px; display:inline-block;"></div>
-        <img src="/images/forum/add.png" 
-            class="add-icon small" 
-            alt="Dodaj komentarz" 
-            onclick="addComment('${post._id}')">
-    `;
+            <span class="like-wrapper">
+                <img src="/images/forum/Like.png" 
+                    class="action-icon like-icon" 
+                    onclick="likePost('${post._id}')">
+                <span class="like-count">${post.likes || 0}</span>
+            </span>
+            <span class="dislike-wrapper">
+                <img src="/images/forum/Dislike.png" 
+                    class="action-icon dislike-icon" 
+                    onclick="dislikePost('${post._id}')">
+                <span class="dislike-count">${post.dislikes || 0}</span>
+            </span>
+            <div class="comment" 
+                id="comment-input-${post._id}" 
+                contenteditable="true" 
+                style="margin: 5px; display:inline-block;"></div>
+            <img src="/images/forum/add.png" 
+                class="add-icon small" 
+                alt="Dodaj komentarz" 
+                onclick="addComment('${post._id}')">
+        `;
 
 
             if (currentUser && (currentUser.role === 'admin' || currentUser._id === post.author?._id)) {
@@ -302,20 +315,46 @@ function renderPosts() {
         postDiv.appendChild(actions);
 
         // Komentarze
+        // Komentarze
         if (Array.isArray(post.comments)) {
             post.comments.forEach(comment => {
                 const c = document.createElement('div');
                 c.className = 'comment';
-                c.innerHTML = `<b><a href="/account/account.html?user=${encodeURIComponent(comment.author?.username || '')}" style="font-weight:bold">${comment.author?.username || '?'}</a>:</b> ${comment.content}`;
-                if (currentUser) {
-                    if (currentUser && (currentUser.role === 'admin' || currentUser._id === comment.author?._id)) {
-                        const deleteIcon = document.createElement('img');
-                        deleteIcon.src = "/images/forum/Delete.png";
-                        deleteIcon.className = "delete-icon small";
-                        deleteIcon.onclick = () => deleteComment(post._id, comment._id);
-                        c.appendChild(deleteIcon);
-                    }
+                c.style.display = 'flex';
+                c.style.alignItems = 'center';
+                c.style.gap = '6px';
+
+                // zdjęcie autora
+                const authorImg = document.createElement('img');
+                authorImg.src = comment.author?.profileImage || '/images/default-profile.png';
+                authorImg.alt = comment.author?.username || 'user';
+                authorImg.className = 'author-img';
+                authorImg.style.width = '20px';
+                authorImg.style.height = '20px';
+                authorImg.style.borderRadius = '50%';
+                c.appendChild(authorImg);
+
+                // link do profilu
+                const authorLink = document.createElement('a');
+                authorLink.href = `/account/account.html?user=${encodeURIComponent(comment.author?.username || '')}`;
+                authorLink.textContent = comment.author?.username || '?';
+                authorLink.style.fontWeight = 'bold';
+                c.appendChild(authorLink);
+
+                // treść komentarza
+                const contentSpan = document.createElement('span');
+                contentSpan.textContent = `: ${comment.content}`;
+                c.appendChild(contentSpan);
+
+                // ikonka usuwania
+                if (currentUser && (currentUser.role === 'admin' || currentUser._id === comment.author?._id)) {
+                    const deleteIcon = document.createElement('img');
+                    deleteIcon.src = "/images/forum/Delete.png";
+                    deleteIcon.className = "delete-icon small";
+                    deleteIcon.onclick = () => deleteComment(post._id, comment._id);
+                    c.appendChild(deleteIcon);
                 }
+
                 postDiv.appendChild(c);
             });
         }
