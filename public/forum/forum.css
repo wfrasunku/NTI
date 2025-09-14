@@ -183,12 +183,6 @@ textarea {
     margin-bottom: 40px;
 }
 
-.like-wrapper, .dislike-wrapper {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 10px;
-}
-
 .like-count {
     color: green;
     font-weight: bold;
