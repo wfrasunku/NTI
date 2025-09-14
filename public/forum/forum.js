@@ -315,7 +315,6 @@ function renderPosts() {
         postDiv.appendChild(actions);
 
         // Komentarze
-        // Komentarze
         if (Array.isArray(post.comments)) {
             post.comments.forEach(comment => {
                 const c = document.createElement('div');
@@ -421,7 +420,7 @@ async function dislikePost(postId) {
 async function addComment(postId) {
     const contentEl = document.getElementById(`comment-input-${postId}`);
     if (!contentEl) return;
-    const content = contentEl.value.trim();
+    const content = contentEl.textContent.trim();
     if (!content) return;
     await fetch(`${API}/posts/${postId}/comments`, {
         method: 'POST',
