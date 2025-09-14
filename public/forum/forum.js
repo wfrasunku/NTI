@@ -214,13 +214,14 @@ function renderPosts() {
 
         const typeSpan = document.createElement('span');
         typeSpan.textContent = ` [${post.type || 'Just talking'}]`;
+        typeSpan.style.color = '#fffcd8ff';
         typeSpan.style.marginLeft = '6px';
         meta.appendChild(typeSpan);
 
         const dateSpan = document.createElement('span');
         dateSpan.textContent = ` • ${new Date(post.createdAt).toLocaleString()}`;
-        dateSpan.style.color = '#666';
-        dateSpan.style.marginLeft = '8px';
+        dateSpan.style.color = '#fffcd8ff';
+        dateSpan.style.marginLeft = '6px';
         meta.appendChild(dateSpan);
 
         postDiv.appendChild(meta);

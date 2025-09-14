@@ -146,8 +146,11 @@ textarea {
 /* Treść posta z ograniczeniem do 4 linii */
 .post-content {
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    display: box;
     -webkit-box-orient: vertical;
+    box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
@@ -158,6 +161,7 @@ textarea {
 /* Gdy rozwinięty */
 .post-content.expanded {
     -webkit-line-clamp: unset;
+    line-clamp: unset;
     overflow: visible;
 }
 
