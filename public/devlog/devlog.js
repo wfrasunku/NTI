@@ -168,19 +168,20 @@ async function addDevlog() {
     devlogs = await (await fetch(`${API}/devlogs`, { credentials: 'include' })).json();
     renderDevlogs();
 
-    // Czyszczenie pól
+    // Wyczyść pola
     document.getElementById('devlog-title').value = '';
     document.getElementById('devlog-content').value = '';
     document.getElementById('devlog-thumbnail').value = '';
     document.getElementById('devlog-images').value = '';
 
-    // Zamknięcie modala
-    const modal = document.getElementById('add-devlog-btn');
+    // Zamknij modal po dodaniu devloga
+    const modal = document.getElementById('add-devlog-modal');
     if (modal) modal.classList.add('hidden');
   } else {
     const err = await res.json();
     alert(err.message || 'Błąd');
   }
+
 }
 
 // Usuwanie devloga (admin)
