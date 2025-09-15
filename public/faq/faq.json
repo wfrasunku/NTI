@@ -17,7 +17,10 @@
     },
     {
         "question": "Kto jest autorami gry?",
-        "answer": "- Mateusz Maciejewski,\n - Antoni Frasuński,\n - Iga Smolarczyk,\n - Kacper Pastuszka,\n - Hanna Mikołajczyk,\n - Antoni Frasuński,\n - Maciej Zielak "
+        "answer": "- Mateusz Maciejewski, \n - Antoni Frasuński, \n - Iga Smolarczyk, \n - Kacper Pastuszka, \n - Hanna Mikołajczyk, \n - Maciej Zielak "
+    },
+    {
+        "question": "Kto jest autorami strony?",
+        "answer": "- Mateusz Maciejewski, \n - Antoni Frasuński"
     }
-
 ]

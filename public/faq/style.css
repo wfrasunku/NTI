@@ -1,36 +1,37 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    background: url("../images/planksBackground.png") no-repeat center center;
-    background-size: cover;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: url("../images/planksBackground.png") no-repeat center center;
+  background-size: cover;
 }
 
 header {
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    gap: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
 }
 
 .logo {
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
 #faq-container {
-    padding: 10px;
-    text-align: left center;
-    
+  text-align: center;
+
 }
 
 .faq-item {
-    background: url("../images/postBackground.png") no-repeat center center;
-    background-size: 100% 80%;
-    padding: 60px;
-    padding-top: 90px;
+  background: url("../images/postBackground.png") no-repeat center center;
+  background-size: 100% 80%;
+  width: 75%;
+  margin: 0px auto;
+  padding: 60px;
+  padding-top: 90px;
 }
 
 .faq-item h3 {
@@ -42,10 +43,11 @@ header {
   background: #fff;
   margin: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-#faq-form input, #faq-form textarea {
+#faq-form input,
+#faq-form textarea {
   display: block;
   width: 100%;
   margin-bottom: 10px;
@@ -57,15 +59,15 @@ header {
 }
 
 .faq-item button.edit-btn {
-    margin-top: 10px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 5px;
-    cursor: pointer;
+  margin-top: 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-    .faq-item button.edit-btn:hover {
-        background-color: #2980b9;
-    }
+.faq-item button.edit-btn:hover {
+  background-color: #2980b9;
+}

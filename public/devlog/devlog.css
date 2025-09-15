@@ -9,7 +9,7 @@ body {
 
 /* Kontener główny */
 .container {
-    max-width: 800px;
+    width: 70%;
     margin: 80px auto 20px auto;
     background: url("../images/postBackground.png") no-repeat center center;
     background-size: 100% 100%;
