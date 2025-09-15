@@ -81,9 +81,6 @@ function renderDevlogs() {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation(); // żeby nie otwierało modala
       const id = btn.dataset.id;
-      if (confirm('Na pewno chcesz usunąć tego devloga?')) {
-        await deleteDevlog(id);
-      }
     });
   });
 }

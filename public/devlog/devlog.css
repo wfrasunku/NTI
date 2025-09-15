@@ -126,13 +126,14 @@ button:hover {
 }
 
 .devlog-modal {
-    background: white;
+    background: url("../images/forumPostBackground.png") no-repeat center center;
     padding: 20px;
-    max-width: 700px;
-    max-height: 90vh;
+    width: 70%;
+    height: 70%;
     overflow-y: auto;
     border-radius: 10px;
     position: relative;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 1);
 }
 
 .devlog-modal .close-modal {
@@ -159,7 +160,7 @@ button:hover {
 }
 
 #add-devlog-modal .modal-content {
-    background: white;
+    background: url("../images/forumPostBackground.png") no-repeat center center;
     padding: 20px;
     border-radius: 10px;
     width: 400px;
@@ -190,6 +191,7 @@ button:hover {
 .devlog-modal .devlog-right {
     display: flex;
     flex-direction: column;
+    margin-top: 40px;
     gap: 10px;
     max-width: 150px;
 }
@@ -293,6 +295,7 @@ button:hover {
     color: rgb(27, 27, 2);
 }
 
+.delete-devlog-btn:hover,
 .add-icon:hover,
 .delete-icon:hover {
     transform: scale(1.1);
