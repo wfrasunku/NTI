@@ -2,9 +2,9 @@
 <html lang="pl">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Devlog</title>
-  <link rel="stylesheet" href="devlog.css">
+    <meta charset="UTF-8">
+    <title>Devlog</title>
+    <link rel="stylesheet" href="devlog.css">
 </head>
 
 <body>
@@ -16,27 +16,31 @@
 
         <!-- Guzik dla admina -->
         <div id="admin-add-btn" class="hidden">
-            <button id="open-add-devlog">➕ Dodaj devlog</button>
+            <button id="open-add-devlog">Dodaj devlog</button>
         </div>
 
         <!-- Modal formularza dodawania devloga -->
         <div id="add-devlog-modal" class="hidden">
-            <div class="modal-content">
-                <span id="close-add-devlog">&times;</span>
-                <h2>Dodaj nowy devlog</h2>
+            <div class="modal-background">
+                <img src="/images/forum/delete.png" id="close-add-devlog" class="delete-icon large" alt="Zamknij">
 
-                <label for="devlog-title">Tytuł:</label>
-                <input type="text" id="devlog-title" placeholder="Podaj tytuł"><br>
+                <div class="modal-top">
+                    <label for="devlog-title">Tytuł:</label>
+                    <input type="text" id="devlog-title" placeholder="Podaj tytuł" class="label">
+                </div>
 
-                <textarea id="devlog-content" placeholder="Napisz treść devloga..." rows="3"></textarea><br>
+                <div class="modal-content">
+                    <textarea id="devlog-content" placeholder="Napisz treść devloga..." rows="3"></textarea><br>
+                </div>
 
-                <label for="devlog-thumbnail">Miniaturka:</label>
-                <input type="file" id="devlog-thumbnail" accept="image/*"><br>
+                <div class="modal-bottom">
+                    <label for="devlog-thumbnail">Miniaturka:</label>
+                    <input type="file" id="devlog-thumbnail" accept="image/*">
+                    <label for="devlog-images">Zdjęcia (max 10):</label>
+                    <input type="file" id="devlog-images" multiple accept="image/*"><br>
+                </div>
 
-                <label for="devlog-images">Zdjęcia:</label>
-                <input type="file" id="devlog-images" multiple accept="image/*"><br>
-
-                <button id="add-devlog-btn">Dodaj devlog</button>
+                <img src="/images/forum/add.png" id="add-devlog-btn" class="add-icon large" alt="Dodaj devlog">
             </div>
         </div>
 
