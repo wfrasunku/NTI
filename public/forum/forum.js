@@ -85,50 +85,6 @@ function setupFilterListeners() {
     }
 }
 
-// ====== Dodawanie postu ======
-async function addPost() {
-    const title = document.getElementById('post-title')?.value.trim() || '';
-    const content = document.getElementById('post-content').value.trim();
-    const type = document.getElementById('post-type').value;
-    const files = document.getElementById('post-images').files;
-
-    if (!title || !content) {
-        alert('Podaj tytuł i treść posta.');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    formData.append('type', type);
-
-    for (let i = 0; i < files.length; i++) {
-        formData.append('images', files[i]);
-    }
-
-    try {
-        const res = await fetch(`${API}/posts`, {
-            method: 'POST',
-            body: formData,
-            credentials: 'include'
-        });
-        if (res.ok) {
-            posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
-            document.getElementById('post-title') && (document.getElementById('post-title').value = '');
-            document.getElementById('post-content').value = '';
-            document.getElementById('post-images').value = '';
-            renderPosts();
-            // Zamknij modal po dodaniu posta
-            const modal = document.getElementById('new-post-modal');
-            if (modal) modal.classList.add('hidden');
-
-        } else {
-            const err = await res.json();
-            alert('Błąd tworzenia posta: ' + (err.message || res.statusText));
-        }
-    } catch (err) { console.error(err); alert('Błąd połączenia'); }
-}
-
 // ====== APLIKUJ FILTRY I SORTOWANIE ======
 function applyFiltersAndSort(originalPosts) {
     let arr = Array.isArray(originalPosts) ? [...originalPosts] : [];
@@ -397,6 +353,50 @@ function openImageGallery(images, startIndex = 0) {
 
     modal.addEventListener('click', () => document.body.removeChild(modal));
     document.body.appendChild(modal);
+}
+
+// ====== Dodawanie postu ======
+async function addPost() {
+    const title = document.getElementById('post-title')?.value.trim() || '';
+    const content = document.getElementById('post-content').value.trim();
+    const type = document.getElementById('post-type').value;
+    const files = document.getElementById('post-images').files;
+
+    if (!title || !content) {
+        alert('Podaj tytuł i treść posta.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('type', type);
+
+    for (let i = 0; i < files.length; i++) {
+        formData.append('images', files[i]);
+    }
+
+    try {
+        const res = await fetch(`${API}/posts`, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+        });
+        if (res.ok) {
+            posts = await (await fetch(`${API}/posts`, { credentials: 'include' })).json();
+            document.getElementById('post-title') && (document.getElementById('post-title').value = '');
+            document.getElementById('post-content').value = '';
+            document.getElementById('post-images').value = '';
+            renderPosts();
+            // Zamknij modal po dodaniu posta
+            const modal = document.getElementById('new-post-modal');
+            if (modal) modal.classList.add('hidden');
+
+        } else {
+            const err = await res.json();
+            alert('Błąd tworzenia posta: ' + (err.message || res.statusText));
+        }
+    } catch (err) { console.error(err); alert('Błąd połączenia'); }
 }
 
 // ====== Usuń post ======

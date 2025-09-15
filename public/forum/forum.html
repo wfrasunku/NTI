@@ -49,26 +49,27 @@
     <div class="container large">
         <!-- Modal dodawania posta -->
         <div id="post-modal" class="hidden">
-            <div class="modal-content">
-                <span id="close-post-modal">&times;</span>
-                <h2>Nowy post</h2>
-
-                <label for="post-title">Tytuł posta:</label>
-                <input type="text" id="post-title" placeholder="Podaj tytuł posta">
-
-                <label for="post-type">Typ posta:</label>
-                <select id="post-type">
-                    <option value="Asking for help">Asking for help</option>
-                    <option value="Feature Idea">Feature Idea</option>
-                    <option value="Bug report">Bug report</option>
-                    <option value="Just talking">Just talking</option>
-                </select><br>
-
-                <textarea id="post-content" placeholder="Napisz nowy post..." rows="3"></textarea><br>
-
-                <label for="post-images">Dodaj zdjęcia:</label>
-                <input type="file" id="post-images" multiple accept="image/*"><br>
-
+            <div class="modal-background">
+                <img src="/images/forum/delete.png" id="close-post-modal" class="delete-icon large" alt="Usuń post">
+                <div class="modal-top">
+                    <label for="post-title" style="border-radius: 15px;">Tytuł posta:</label>
+                    <input type="text" id="post-title" placeholder="Podaj tytuł posta" class="label">
+                    <label for="post-type" style="margin-left: 50px;">Typ posta:</label>
+                    <select id="post-type" class="label">
+                        <option value="Asking for help">Asking for help</option>
+                        <option value="Feature Idea">Feature Idea</option>
+                        <option value="Bug report">Bug report</option>
+                        <option value="Just talking">Just talking</option>
+                    </select><br>
+                </div>
+                
+                <div class="modal-content">
+                    <textarea id="post-content" placeholder="Napisz nowy post..." rows="3"></textarea><br>
+                </div>
+                <div class="modal-bottom">
+                    <label for="post-images">Dodaj zdjęcia (Max 10):</label>
+                    <input type="file" id="post-images" multiple accept="image/*"><br>
+                </div>
                 <img src="/images/forum/add.png" id="add-post-btn" class="add-icon large" alt="Dodaj post">
             </div>
         </div>

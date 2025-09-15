@@ -1,49 +1,95 @@
 body {
-    background: url("../images/planksBackground.png") ;
+    background: url("../images/planksBackground.png");
     background-repeat: repeat;
     background-size: 100% auto;
 }
 
 /* Modal nowego posta */
 #post-modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
 }
 
 #post-modal.hidden {
-  display: none !important;
+    display: none !important;
+}
+
+#post-modal .modal-background {
+    background: url("../images/forum/ModalBackground.png") no-repeat center center;
+    background-size: 100% 100%;
+    width: 70%;   
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #post-modal .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
+    background: none;
+    width: 78%;
+    margin-top: 125px;
+    margin-bottom: 120px;   
+    box-sizing: border-box;
+    position: relative;
+}
+
+#post-modal .modal-top {
+    position: absolute;
+    margin-top: 55px;
+    font-weight: bold;
+    font-size: 20px;
+    color:#fde0b5;
+}
+
+#post-modal .modal-bottom {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 52px;
+    font-weight: bold;
+    font-size: 20px;
+    color:#fde0b5;
 }
 
 #post-modal #close-post-modal {
-  position: absolute;
-  top: 10px; right: 10px;
-  cursor: pointer;
-  font-size: 20px;
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+}
+
+#post-modal #add-post-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
 }
 
 textarea {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    border-radius: 5px;
-    border: 1px solid #bbb;
-    resize: vertical;
+    width: 98%;
+    height: 550px;
+    padding: 10px;
+    border-radius: 15px;
+    border: 2px solid #332106;
+    background: url("../images/forumPostBackground.png") no-repeat center center;
     font-size: 14px;
+    resize: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 1);
+}
+
+textarea::placeholder {
+    color: rgb(27, 27, 2);
 }
 
 /* Forum */
@@ -68,11 +114,14 @@ textarea {
 .filter-bar {
     display: flex;
     justify-content: center;
-    gap: 20px;         
+    gap: 20px;
     flex-wrap: wrap;
 }
 
-.filter-bar input, .filter-bar select, .filter-bar button {
+.label,
+.filter-bar input,
+.filter-bar select,
+.filter-bar button {
     font-size: 12px;
     min-width: 200px;
     border-radius: 8px;
@@ -138,7 +187,12 @@ textarea {
     height: 16px;
 }
 
-.add-icon:hover, .action-icon:hover, .reset-icon:hover, .delete-icon:hover, button:hover, .toggle-content-btn:hover {
+.add-icon:hover,
+.action-icon:hover,
+.reset-icon:hover,
+.delete-icon:hover,
+button:hover,
+.toggle-content-btn:hover {
     transform: scale(1.1);
     filter: brightness(1.2);
 }
@@ -171,12 +225,13 @@ textarea {
     color: #fdf9e0;
     cursor: pointer;
     font-weight: bold;
-    
+
     display: block;
     margin: 5px auto 0 auto;
 }
 
-.post, .comment {
+.post,
+.comment {
     position: relative;
     padding: 25px;
     border-radius: 5px;
@@ -220,6 +275,7 @@ textarea {
     color: #6b4b06;
     pointer-events: none;
 }
+
 .comment[contenteditable="true"] {
-    color: #000; 
+    color: #000;
 }
