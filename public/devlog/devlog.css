@@ -402,6 +402,8 @@ button:hover {
 
 .devlog-left {
     flex: 1;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .devlog-right {

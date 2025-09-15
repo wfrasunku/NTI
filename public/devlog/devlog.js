@@ -81,6 +81,7 @@ function renderDevlogs() {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation(); // żeby nie otwierało modala
       const id = btn.dataset.id;
+      deleteDevlog(id);
     });
   });
 }
