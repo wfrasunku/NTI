@@ -312,17 +312,6 @@ button:hover {
     padding: 6px 12px;
 }
 
-/* Komentarze */
-.comment {
-    margin-top: 8px;
-    margin-left: 20px;
-    padding: 8px;
-    background-color: #f0f0f0;
-    border-left: 3px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
 .add-icon {
     position: absolute;
     left: 350px;
@@ -338,4 +327,94 @@ button:hover {
     margin: 10px;
     width: 48px;
     height: 48px;
+}
+
+.devlog-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.devlog-modal {
+    background: url("../images/forumPostBackground.png") no-repeat center center;
+    width: 70%;
+    max-height: 80%;
+    overflow-y: auto;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    z-index: 10;
+}
+
+.modal-title-date h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.modal-title-date .modal-date {
+    font-size: 14px;
+    color: #666;
+    margin-left: 15px;
+}
+
+.modal-header .close-modal {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+.modal-header .close-modal img {
+    top:20px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.modal-body {
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.devlog-main {
+    display: flex;
+    align-items: flex-start;
+}
+
+.devlog-left {
+    flex: 1;
+}
+
+.devlog-right {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    max-width: 150px;
+}
+
+.devlog-right img {
+    width: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+    cursor: pointer;
 }

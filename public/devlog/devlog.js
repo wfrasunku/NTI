@@ -95,15 +95,21 @@ function openDevlogModal(log) {
   modal.className = 'devlog-modal';
 
   modal.innerHTML = `
-    <button class="close-modal">✖</button>
-    <div class="devlog-main">
-      <div class="devlog-left">
+    <div class="modal-header">
+      <div class="modal-title-date">
         <h2>${log.title}</h2>
-        <div class="meta">${new Date(log.createdAt).toLocaleString()}</div>
-        <p>${log.content}</p>
+        <span class="modal-date">${new Date(log.createdAt).toLocaleString()}</span>
       </div>
-      <div class="devlog-right">
-        ${log.images && log.images.length ? log.images.map((url, i) => `<img src="${url}" data-index="${i}" class="devlog-img">`).join('') : ''}
+      <button class="close-modal"><img src="/images/forum/delete.png" alt="Zamknij" /></button>
+    </div>
+    <div class="modal-body">
+      <div class="devlog-main">
+        <div class="devlog-left">
+          <p>${log.content}</p>
+        </div>
+        <div class="devlog-right">
+          ${log.images && log.images.length ? log.images.map((url, i) => `<img src="${url}" data-index="${i}" class="devlog-img">`).join('') : ''}
+        </div>
       </div>
     </div>
   `;
@@ -115,7 +121,7 @@ function openDevlogModal(log) {
   overlay.querySelector('.close-modal').addEventListener('click', () => overlay.remove());
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 
-  // Obsługa kliknięcia na zdjęcia
+  // Kliknięcie na zdjęcia
   if (log.images && log.images.length) {
     modal.querySelectorAll('.devlog-img').forEach(img => {
       img.addEventListener('click', (e) => {
@@ -126,6 +132,7 @@ function openDevlogModal(log) {
     });
   }
 }
+
 
 // Dodawanie devloga (admin)
 async function addDevlog() {
