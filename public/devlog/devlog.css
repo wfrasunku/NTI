@@ -1,17 +1,28 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    min-height: 100vh;
-    background: url("../images/planksBackground.png") no-repeat center center;
-    background-size: cover;
+    background: url("../images/planksBackground.png");
+    background-repeat: repeat;
+    background-size: 100% auto;
 }
-
 
 /* Kontener główny */
 .container {
-    width: 70%;
-    margin: 80px auto 20px auto;
+    max-width: 1600px;
+    border-radius: 10px;
+}
+
+.container.small {
     background: url("../images/postBackground.png") no-repeat center center;
+    background-size: 80% 100%;
+    margin: 50px auto 0px auto;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container.large {
+    width: 70%;
+    margin: 0px auto 20px auto;
+    background: none;
     background-size: 100% 100%;
     padding: 40px;
     border-radius: 10px;
@@ -48,17 +59,19 @@ button:hover {
 
 /* Devlog */
 .devlog {
-    border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 12px;
-    border-radius: 6px;
-    background-color: #fafafa;
+    border-radius: 15px;
+    border: 2px solid #332106;
+    background: url("../images/forumPostBackground.png") no-repeat center center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 1);
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .devlog:hover {
-    background-color: #f0f0f0;
+    transform: scale(1.05);
+    filter: brightness(1.1);
 }
 
 .devlog-header {
@@ -67,8 +80,8 @@ button:hover {
 }
 
 .thumbnail {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
     border-radius: 6px;
     margin-right: 10px;
@@ -76,21 +89,36 @@ button:hover {
 
 .title-date h3 {
     margin: 0;
-    font-size: 18px;
+    font-size: 26px;
+    font-weight: bold;
 }
 
 .title-date .meta {
-    font-size: 13px;
+    font-size: 16px;
     color: #666;
-    margin-top: 4px;
+    margin-top: 6px;
+}
+
+.delete-devlog-btn {
+  margin-left: auto;      
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+}
+
+.devlog-header {
+  display: flex;
+  align-items: center;
 }
 
 /* Modal devloga */
 .devlog-modal-overlay {
     position: fixed;
-    top:0; left:0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -109,7 +137,8 @@ button:hover {
 
 .devlog-modal .close-modal {
     position: absolute;
-    top: 10px; right: 10px;
+    top: 10px;
+    right: 10px;
     background: transparent;
     border: none;
     font-size: 18px;
@@ -117,29 +146,33 @@ button:hover {
 }
 
 #add-devlog-modal {
-  position: fixed;
-  top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
 }
 
 #add-devlog-modal .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  max-width: 90%;
-  position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
 }
 
 #close-add-devlog {
-  position: absolute;
-  top: 10px; right: 15px;
-  cursor: pointer;
-  font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 20px;
 }
 
 /* Modal devloga z kolumnami */
@@ -170,8 +203,10 @@ button:hover {
 /* Modal dodawania devloga – wygląd jak forum */
 #add-devlog-modal {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
@@ -198,11 +233,11 @@ button:hover {
     margin-top: 45px;
     font-weight: bold;
     font-size: 20px;
-    color:#fde0b5;
+    color: #fde0b5;
 
     display: flex;
     align-items: center;
-    gap: 15px; 
+    gap: 15px;
 }
 
 #add-devlog-modal .modal-content {
@@ -220,7 +255,7 @@ button:hover {
     margin-bottom: 52px;
     font-weight: bold;
     font-size: 20px;
-    color:#fde0b5;
+    color: #fde0b5;
 }
 
 #add-devlog-modal #close-add-devlog {
@@ -259,14 +294,12 @@ button:hover {
 }
 
 .add-icon:hover,
-.delete-icon:hover
-{
+.delete-icon:hover {
     transform: scale(1.1);
     filter: brightness(1.2);
 }
 
-.label
-{
+.label {
     font-size: 12px;
     min-width: 200px;
     border-radius: 8px;
@@ -285,4 +318,21 @@ button:hover {
     border-left: 3px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
+}
+
+.add-icon {
+    position: absolute;
+    left: 350px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 4px;
+    vertical-align: middle;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.add-icon.large {
+    margin: 10px;
+    width: 48px;
+    height: 48px;
 }

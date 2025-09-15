@@ -53,7 +53,6 @@ function renderDevlogs() {
     const div = document.createElement('div');
     div.className = 'devlog';
 
-    // Miniaturka + tytuł i data
     div.innerHTML = `
       <div class="devlog-header">
         ${log.thumbnail ? `<img class="thumbnail" src="${log.thumbnail}" alt="miniaturka">` : ''}
@@ -61,14 +60,34 @@ function renderDevlogs() {
           <h3>${log.title}</h3>
           <div class="meta">${new Date(log.createdAt).toLocaleString()}</div>
         </div>
+        ${currentUser && currentUser.role === 'admin'
+        ? `<img src="/images/forum/delete.png" class="delete-devlog-btn" data-id="${log._id}" alt="Usuń">`
+        : ''}
       </div>
     `;
 
-    div.addEventListener('click', () => openDevlogModal(log));
+    // Kliknięcie w całość otwiera modal
+    div.addEventListener('click', (e) => {
+      // jeśli kliknięto "usuń", to nie otwieraj modala
+      if (e.target.classList.contains('delete-devlog-btn')) return;
+      openDevlogModal(log);
+    });
 
     container.appendChild(div);
   });
+
+  // Podpinanie obsługi "usuń"
+  document.querySelectorAll('.delete-devlog-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation(); // żeby nie otwierało modala
+      const id = btn.dataset.id;
+      if (confirm('Na pewno chcesz usunąć tego devloga?')) {
+        await deleteDevlog(id);
+      }
+    });
+  });
 }
+
 
 // Modal devloga
 function openDevlogModal(log) {
@@ -148,13 +167,40 @@ async function addDevlog() {
   if (res.ok) {
     devlogs = await (await fetch(`${API}/devlogs`, { credentials: 'include' })).json();
     renderDevlogs();
+
+    // Czyszczenie pól
     document.getElementById('devlog-title').value = '';
     document.getElementById('devlog-content').value = '';
     document.getElementById('devlog-thumbnail').value = '';
     document.getElementById('devlog-images').value = '';
+
+    // Zamknięcie modala
+    const modal = document.getElementById('add-devlog-btn');
+    if (modal) modal.classList.add('hidden');
   } else {
     const err = await res.json();
     alert(err.message || 'Błąd');
+  }
+}
+
+// Usuwanie devloga (admin)
+async function deleteDevlog(id) {
+  try {
+    const res = await fetch(`${API}/devlogs/${id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+
+    if (res.ok) {
+      devlogs = devlogs.filter(d => d._id !== id);
+      renderDevlogs();
+    } else {
+      const err = await res.json();
+      alert(err.message || 'Błąd przy usuwaniu');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Nie udało się usunąć devloga.');
   }
 }
 
