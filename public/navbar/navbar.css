@@ -4,20 +4,20 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 50px; /* niższy navbar */
-  background: rgba(0, 0, 0, 0.5); /* przezroczysty */
+  height: 50px;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 15px;
   z-index: 10000;
-  backdrop-filter: blur(6px); /* lekki efekt rozmycia tła */
+  backdrop-filter: blur(6px);
   box-sizing: border-box;
 }
 
 /* Logo po lewej */
 .navbar-logo img {
-  height: 36px; /* dopasowane do niższego navbaru */
+  height: 36px;
   cursor: pointer;
 }
 
@@ -44,7 +44,7 @@
   color: white;
   font-size: 14px;
   font-family: Arial, sans-serif;
-  flex-wrap: nowrap;   /* nie zawijaj */
+  flex-wrap: nowrap;
 }
 
 #user-info {
@@ -87,7 +87,7 @@
 /* Sidebar */
 #sidebar {
     position: fixed;
-    top: 50px; /* dopasowane do nowej wysokości navbaru */
+    top: 50px;
     right: 0;
     width: 220px;
     background: rgba(0, 0, 0, 0.75);
@@ -125,8 +125,11 @@
 /* linki w navbarze */
 .navbar-links {
   display: flex;
-  gap: 20px;
-  margin-left: 20px; /* odstęp od loga */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 50px;
 }
 
 .navbar-links a {
